@@ -37,6 +37,18 @@ const PHOTOS = [
 
 const QUANTITY_OBJECTS = 10;
 
+const COORD_DECIMALS = 5;
+
+const LatRange = {
+  MIN: 35.65,
+  MAX: 35.7
+};
+
+const LngRange = {
+  MIN: 139.7,
+  MAX: 139.8
+};
+
 
 // Функция, возвращающая значение элемента массива в рандомном порядке
 // Источник: https://expange.ru/e/%D0%A1%D0%BB%D1%83%D1%87%D0%B0%D0%B9%D0%BD%D1%8B%D0%B9_%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82_%D0%BC%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D0%B0_(JavaScript)
@@ -50,7 +62,6 @@ getArrayRandomElement(TYPES);
 
 
 // Функция, возвращающая случайное целое число из переданного диапазона включительно.
-
 // Источник: https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 
 function getRandomNumber(min, max) {
@@ -63,6 +74,7 @@ function getRandomNumber(min, max) {
 }
 
 getRandomNumber(1, 7);
+
 
 // Функция, возвращающая случайное число с плавающей точкой из переданного диапазона включительно.
 // Источник: https://bobbyhadz.com/blog/javascript-get-random-float-in-range
@@ -81,56 +93,49 @@ getRandomCoordinate(2, 4, 6);
 // Функция, задающая номер для адреса изображения (avatar)
 // Источник: https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
 
-function getRandomPic(min, max) {
-  if (min >= max || min < 0 || max <= 0) {
-    return 'Error. Pick other numbers.';
-  }
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  let randomNumberAvatar = Math.floor(Math.random() * (max - min + 1)) + min;
-  if (randomNumberAvatar < 10) {
-    randomNumberAvatar = String(randomNumberAvatar).padStart(2, '0');
-  }
-  return randomNumberAvatar;
+function getNumberWithLeadZero(num) {
+  return num < 10 ? `0${num}` : num;
 }
-
-getRandomPic(1, 10);
 
 
 // Функция, генерирующая одно объявление (объект) со случайным содержимым.
-//Источник: частично из демонстрации и лайва раздела 4 "Встроенные объекты и функции".
+// Источник: частично из демонстрации и лайва раздела 4 "Встроенные объекты и функции".
 
-const getListing = () => ({
-  author: {
-    avatar: `img/avatars/user${getRandomPic(1, 10)}.png`,
-  }, // трудности с реализацией неповторяемости номеров
-  offer: {
-    title: 'Заголовок объявления',
-    address: `${String(getRandomCoordinate(35.65000, 35.70000, 5))},${String(getRandomCoordinate(35.65000, 35.70000, 5))}`, // тут тоже трудности, написала как смогла, чтобы хотя бы работало
-    price: getRandomNumber(1, 50000),
-    type: getArrayRandomElement(TYPES),
-    rooms: getRandomNumber(1, 10),
-    guests: getRandomNumber(1, 10),
-    checkin: getArrayRandomElement(CHECKIN),
-    checkout: getArrayRandomElement(CHECKOUT),
-    features: getArrayRandomElement(FEATURES),
-    description: 'Описание номера',
-    photos: getArrayRandomElement(PHOTOS),
-  },
-  location: {  // готово
-    lat: getRandomCoordinate(35.65000, 35.70000, 5),
-    lng: getRandomCoordinate(139.70000, 139.80000, 5),
-  }
-});
+const getListing = (_el, i) => {
+  const lat = getRandomCoordinate(LatRange.MIN, LatRange.MAX, COORD_DECIMALS);
+  const lng = getRandomCoordinate(LngRange.MIN, LngRange.MAX, COORD_DECIMALS);
+
+  return {
+    author: {
+      avatar: `img/avatars/user${getNumberWithLeadZero(i + 1)}.png`,
+    },
+    offer: {
+      title: `Заголовок объявления ${i + 1}`,
+      address: `${lat}, ${lng}`,
+      price: getRandomNumber(1, 50000),
+      type: getArrayRandomElement(TYPES),
+      rooms: getRandomNumber(1, 10),
+      guests: getRandomNumber(1, 10),
+      checkin: getArrayRandomElement(CHECKIN),
+      checkout: getArrayRandomElement(CHECKOUT),
+      features: getArrayRandomElement(FEATURES),
+      description: `Описание номера ${i + 1}`,
+      photos: getArrayRandomElement(PHOTOS),
+    },
+    location: {
+      lat,
+      lng
+    }
+  };
+};
 
 getListing();
 
-//Генерация массива из 10 объявлений (объектов) со случайным содержимым.
-//Источник: https://up.htmlacademy.ru/profession/react/9/javascript/25/demos/6301#13
 
-const arrayRandomListings = Array.from({ length: QUANTITY_OBJECTS }, getListing);
+// Функция, генерирующая массив из 10 объявлений (объектов) со случайным содержимым.
+// Источник: https://up.htmlacademy.ru/profession/react/9/javascript/25/demos/6301#13
 
-function getNewRandomListings(getArrayListings) {
-  return getArrayListings;
+function getNewRandomListings(lengthArray, object) {
+  return Array.from({ length: lengthArray }, object);
 }
-getNewRandomListings(arrayRandomListings);
+getNewRandomListings(QUANTITY_OBJECTS, getListing);
