@@ -1,5 +1,3 @@
-import { TYPES, CHECKIN, CHECKOUT, FEATURES, PHOTOS, QUANTITY_OBJECTS, COORD_DECIMALS, LatRange, LngRange, PriceRange, RoomsRange, GuestsRange } from './data.js';
-
 // Вспомогательные функции
 
 
