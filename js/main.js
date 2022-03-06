@@ -49,6 +49,21 @@ const LngRange = {
   MAX: 139.8
 };
 
+const PriceRange = {
+  MIN: 1,
+  MAX: 50000
+};
+
+const RoomsRange = {
+  MIN: 1,
+  MAX: 10
+};
+
+const GuestsRange = {
+  MIN: 1,
+  MAX: 10
+};
+
 
 // Функция, возвращающая значение элемента массива в рандомном порядке
 // Источник: https://expange.ru/e/%D0%A1%D0%BB%D1%83%D1%87%D0%B0%D0%B9%D0%BD%D1%8B%D0%B9_%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82_%D0%BC%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D0%B0_(JavaScript)
@@ -98,6 +113,19 @@ function getNumberWithLeadZero(num) {
 }
 
 
+// Функция, для получения случайного фрагмента массива.
+
+const getRandomArrayPart = (arr) => {
+  const lastIndex = arr.length - 1;
+  const a = getRandomNumber(0, lastIndex);
+  const b = getRandomNumber(0, lastIndex);
+  const lower = Math.min(a, b);
+  const upper = Math.max(a, b);
+
+  return arr.slice(lower, upper);
+};
+
+
 // Функция, генерирующая одно объявление (объект) со случайным содержимым.
 // Источник: частично из демонстрации и лайва раздела 4 "Встроенные объекты и функции".
 
@@ -112,13 +140,13 @@ const getListing = (_el, i) => {
     offer: {
       title: `Заголовок объявления ${i + 1}`,
       address: `${lat}, ${lng}`,
-      price: getRandomNumber(1, 50000),
+      price: getRandomNumber(PriceRange.MIN, PriceRange.MAX),
       type: getArrayRandomElement(TYPES),
-      rooms: getRandomNumber(1, 10),
-      guests: getRandomNumber(1, 10),
+      rooms: getRandomNumber(RoomsRange.MIN, RoomsRange.MAX),
+      guests: getRandomNumber(GuestsRange.MIN, GuestsRange.MAX),
       checkin: getArrayRandomElement(CHECKIN),
       checkout: getArrayRandomElement(CHECKOUT),
-      features: getArrayRandomElement(FEATURES),
+      features: getRandomArrayPart(FEATURES),
       description: `Описание номера ${i + 1}`,
       photos: getArrayRandomElement(PHOTOS),
     },
@@ -135,7 +163,7 @@ getListing();
 // Функция, генерирующая массив из 10 объявлений (объектов) со случайным содержимым.
 // Источник: https://up.htmlacademy.ru/profession/react/9/javascript/25/demos/6301#13
 
-function getNewRandomListings(lengthArray, object) {
-  return Array.from({ length: lengthArray }, object);
+function getNewRandomListings(length, getObject) {
+  return Array.from({ length }, getObject);
 }
 getNewRandomListings(QUANTITY_OBJECTS, getListing);
