@@ -4,7 +4,6 @@ import {
   CHECKOUT,
   FEATURES,
   PHOTOS,
-  QUANTITY_OBJECTS,
   COORD_DECIMALS,
   LatRange,
   LngRange,
@@ -62,7 +61,6 @@ function getNewRandomListings(length, getObject) {
   return Array.from({ length }, getObject);
 }
 
-getNewRandomListings(QUANTITY_OBJECTS, getListing);
 
 export {
   getListing,
