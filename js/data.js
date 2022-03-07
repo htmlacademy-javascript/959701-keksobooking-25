@@ -64,4 +64,17 @@ const GuestsRange = {
   MAX: 10
 };
 
-export { TYPES, CHECKIN, CHECKOUT, FEATURES, PHOTOS, QUANTITY_OBJECTS, COORD_DECIMALS, LatRange, LngRange, PriceRange, RoomsRange, GuestsRange };
+export {
+  TYPES,
+  CHECKIN,
+  CHECKOUT,
+  FEATURES,
+  PHOTOS,
+  QUANTITY_OBJECTS,
+  COORD_DECIMALS,
+  LatRange,
+  LngRange,
+  PriceRange,
+  RoomsRange,
+  GuestsRange
+};

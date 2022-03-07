@@ -1,5 +1,25 @@
-import { TYPES, CHECKIN, CHECKOUT, FEATURES, PHOTOS, QUANTITY_OBJECTS, COORD_DECIMALS, LatRange, LngRange, PriceRange, RoomsRange, GuestsRange } from './data.js';
-import { getArrayRandomElement, getRandomNumber, getRandomCoordinate, getNumberWithLeadZero, getRandomArrayPart } from './util.js';
+import {
+  TYPES,
+  CHECKIN,
+  CHECKOUT,
+  FEATURES,
+  PHOTOS,
+  QUANTITY_OBJECTS,
+  COORD_DECIMALS,
+  LatRange,
+  LngRange,
+  PriceRange,
+  RoomsRange,
+  GuestsRange
+} from './data.js';
+
+import {
+  getArrayRandomElement,
+  getRandomNumber,
+  getRandomCoordinate,
+  getNumberWithLeadZero,
+  getRandomArrayPart
+} from './util.js';
 
 // Генерация объявлений
 
@@ -42,8 +62,10 @@ function getNewRandomListings(length, getObject) {
   return Array.from({ length }, getObject);
 }
 
-getNewRandomListings(QUANTITY_OBJECTS, getListing);
 
-export { getListing, getNewRandomListings };
+export {
+  getListing,
+  getNewRandomListings
+};
 
 

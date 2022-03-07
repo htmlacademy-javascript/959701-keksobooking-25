@@ -55,4 +55,10 @@ const getRandomArrayPart = (arr) => {
   return arr.slice(lower, upper);
 };
 
-export { getArrayRandomElement, getRandomNumber, getRandomCoordinate, getNumberWithLeadZero, getRandomArrayPart };
+export {
+  getArrayRandomElement,
+  getRandomNumber,
+  getRandomCoordinate,
+  getNumberWithLeadZero,
+  getRandomArrayPart
+};
