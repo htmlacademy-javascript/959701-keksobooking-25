@@ -62,6 +62,7 @@ function getNewRandomListings(length, getObject) {
   return Array.from({ length }, getObject);
 }
 
+getNewRandomListings(QUANTITY_OBJECTS, getListing);
 
 export {
   getListing,
