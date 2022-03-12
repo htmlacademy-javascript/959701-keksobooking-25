@@ -1,12 +1,13 @@
 // Фиксированные данные
 
-const TYPES = [
-  'palace',
-  'flat',
-  'house',
-  'bungalow',
-  'hotel'
-];
+const TYPES = {
+  palace: 'Дворец',
+  flat: 'Квартира',
+  house: 'Дом',
+  bungalow: 'Бунгало',
+  hotel: 'Отель'
+};
+
 
 const CHECKIN = [
   '12:00',
@@ -35,7 +36,7 @@ const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
 ];
 
-const QUANTITY_OBJECTS = 10;
+const QUANTITY_OBJECTS = 1;
 
 const COORD_DECIMALS = 5;
 

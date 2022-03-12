@@ -1,3 +1,4 @@
+
 // Вспомогательные функции
 
 
@@ -55,10 +56,20 @@ const getRandomArrayPart = (arr) => {
   return arr.slice(lower, upper);
 };
 
+
+// Функция для получения случайного значения из объекта.
+
+const getRandomProperty = function (obj) {
+  const keys = Object.keys(obj);
+  return obj[keys[keys.length * Math.random() << 0]];
+};
+
+
 export {
   getArrayRandomElement,
   getRandomNumber,
   getRandomCoordinate,
   getNumberWithLeadZero,
-  getRandomArrayPart
+  getRandomArrayPart,
+  getRandomProperty
 };
