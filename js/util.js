@@ -61,9 +61,8 @@ const getRandomArrayPart = (arr) => {
 
 const getRandomProperty = function (obj) {
   const keys = Object.keys(obj);
-  return obj[keys[keys.length * Math.random() << 0]];
+  return obj[getArrayRandomElement(keys)];
 };
-
 
 export {
   getArrayRandomElement,

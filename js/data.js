@@ -36,7 +36,7 @@ const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
 ];
 
-const QUANTITY_OBJECTS = 1;
+const QUANTITY_OBJECTS = 10;
 
 const COORD_DECIMALS = 5;
 
