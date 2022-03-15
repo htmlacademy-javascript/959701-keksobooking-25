@@ -1,12 +1,13 @@
 // Фиксированные данные
 
-const TYPES = [
-  'palace',
-  'flat',
-  'house',
-  'bungalow',
-  'hotel'
-];
+const TYPES = {
+  palace: 'Дворец',
+  flat: 'Квартира',
+  house: 'Дом',
+  bungalow: 'Бунгало',
+  hotel: 'Отель'
+};
+
 
 const CHECKIN = [
   '12:00',

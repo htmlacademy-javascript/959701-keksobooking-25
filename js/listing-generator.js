@@ -13,6 +13,7 @@ import {
 } from './data.js';
 
 import {
+  getRandomProperty,
   getArrayRandomElement,
   getRandomNumber,
   getRandomCoordinate,
@@ -37,14 +38,14 @@ const getListing = (_el, i) => {
       title: `Заголовок объявления ${i + 1}`,
       address: `${lat}, ${lng}`,
       price: getRandomNumber(PriceRange.MIN, PriceRange.MAX),
-      type: getArrayRandomElement(TYPES),
+      type: getRandomProperty (TYPES),
       rooms: getRandomNumber(RoomsRange.MIN, RoomsRange.MAX),
       guests: getRandomNumber(GuestsRange.MIN, GuestsRange.MAX),
       checkin: getArrayRandomElement(CHECKIN),
       checkout: getArrayRandomElement(CHECKOUT),
       features: getRandomArrayPart(FEATURES),
       description: `Описание номера ${i + 1}`,
-      photos: getArrayRandomElement(PHOTOS),
+      photos: getRandomArrayPart(PHOTOS),
     },
     location: {
       lat,
@@ -53,7 +54,6 @@ const getListing = (_el, i) => {
   };
 };
 
-
 // Функция, генерирующая массив из 10 объявлений (объектов) со случайным содержимым.
 // Источник: https://up.htmlacademy.ru/profession/react/9/javascript/25/demos/6301#13
 
@@ -61,10 +61,7 @@ function getNewRandomListings(length, getObject) {
   return Array.from({ length }, getObject);
 }
 
-
 export {
   getListing,
-  getNewRandomListings
+  getNewRandomListings,
 };
-
-
