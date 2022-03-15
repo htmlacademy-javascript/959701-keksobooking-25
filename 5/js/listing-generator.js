@@ -54,14 +54,12 @@ const getListing = (_el, i) => {
   };
 };
 
-
 // Функция, генерирующая массив из 10 объявлений (объектов) со случайным содержимым.
 // Источник: https://up.htmlacademy.ru/profession/react/9/javascript/25/demos/6301#13
 
 function getNewRandomListings(length, getObject) {
   return Array.from({ length }, getObject);
 }
-
 
 export {
   getListing,
