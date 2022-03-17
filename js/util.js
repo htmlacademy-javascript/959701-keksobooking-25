@@ -59,10 +59,13 @@ const getRandomArrayPart = (arr) => {
 
 // Функция для получения случайного значения из объекта.
 
-const getRandomProperty = function (obj) {
+const getRandomProperty = (obj) => {
   const keys = Object.keys(obj);
   return obj[getArrayRandomElement(keys)];
 };
+
+// Функция проверки нажатия клавиши Escape
+const isEscapeKey = (evt) => evt.key === 'Escape';
 
 export {
   getArrayRandomElement,
@@ -70,5 +73,6 @@ export {
   getRandomCoordinate,
   getNumberWithLeadZero,
   getRandomArrayPart,
-  getRandomProperty
+  getRandomProperty,
+  isEscapeKey
 };
