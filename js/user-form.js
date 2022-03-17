@@ -56,7 +56,7 @@ const validateTitle = (value) => value.length >= 30 && value.length <= 100;
 pristine.addValidator(form.querySelector('#title'), validateTitle);
 
 // Проверка price
-const validatePrice = (value) =>value < 100000;
+const validatePrice = (value) => value < 100000;
 
 pristine.addValidator(form.querySelector('#price'), validatePrice, 'Не больше 100 000');
 
