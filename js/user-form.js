@@ -1,6 +1,6 @@
 import { createPopup } from './util.js';
 
-//Валидация формы
+// Валидация формы
 
 const errorTemplate = document.querySelector('#error').content;
 const successTemplate = document.querySelector('#success').content;
