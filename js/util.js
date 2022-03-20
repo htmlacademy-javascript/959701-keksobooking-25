@@ -65,7 +65,28 @@ const getRandomProperty = (obj) => {
 };
 
 // Функция проверки нажатия клавиши Escape
-const isEscapeKey = (evt) => evt.key === 'Escape';
+
+const isEscapeKeyPressed = (evt) => evt.key === 'Escape';
+
+// Создание высплывающего окна
+
+const createPopup = (template) => {
+  const popup = template.cloneNode(true).querySelector('div');
+  document.body.append(popup);
+  const closePopup = () => {
+    popup.remove();
+    document.removeEventListener('keydown', keyCloseHandler);
+  };
+
+  function keyCloseHandler(evt) {
+    if (isEscapeKeyPressed(evt)) {
+      evt.preventDefault();
+      closePopup();
+    }
+  }
+  popup.addEventListener('click', () => closePopup());
+  document.addEventListener('keydown', keyCloseHandler);
+};
 
 export {
   getArrayRandomElement,
@@ -74,5 +95,6 @@ export {
   getNumberWithLeadZero,
   getRandomArrayPart,
   getRandomProperty,
-  isEscapeKey
+  isEscapeKeyPressed,
+  createPopup
 };
