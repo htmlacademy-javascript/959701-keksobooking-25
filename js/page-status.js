@@ -1,34 +1,25 @@
-// Неактивное состояние страницы
+// Активация/деактивация страницы
 
-const disableForm = () => {
-  document.querySelector('.ad-form').classList.add('ad-form--disabled');
-  document.querySelector('.map__filters').classList.add('map__filters--disabled');
-  const disabledFormElements = document.querySelector('.ad-form').querySelectorAll('fieldset');
-  for (let i = 0; i < disabledFormElements.length; i++) {
-    disabledFormElements[i].setAttribute('disabled', 'disabled');
-  }
-  const disabledFilterElements = document.querySelector('.map__filters').querySelectorAll('select, fieldset');
-  for (let j = 0; j < disabledFilterElements.length; j++) {
-    disabledFilterElements[j].setAttribute('disabled', 'disabled');
-  }
+const mapFiltersElement = document.querySelector('.map__filters');
+const adFormElement = document.querySelector('.ad-form');
+const mapFiltersDisabledClassName = 'map__filters--disabled';
+const adFormDisabledClassName = 'ad-form--disabled';
+
+const toggleForm = (activeFlag, formElement, disabledClassName) => {
+  const classMethod = activeFlag ? 'remove' : 'add';
+  formElement.classList[classMethod](disabledClassName);
+
+  formElement.querySelectorAll('fieldset').forEach((fieldset) => {
+    fieldset.disabled = !activeFlag;
+  });
 };
 
-// Переход в неактивное состояние при загрузке страницы
-
-document.addEventListener('DOMContentLoaded', disableForm);
-
-// Активное состояние страницы
-const activateForm = () => {
-  document.querySelector('.ad-form').classList.remove('ad-form--disabled');
-  document.querySelector('.map__filters').classList.remove('map__filters--disabled');
-  const activeFormElements = document.querySelector('.ad-form').querySelectorAll('fieldset');
-  for (let i = 0; i < activeFormElements.length; i++) {
-    activeFormElements[i].removeAttribute('disabled');
-  }
-  const activeFilterElements = document.querySelector('.map__filters').querySelectorAll('select, fieldset');
-  for (let j = 0; j < activeFilterElements.length; j++) {
-    activeFilterElements[j].removeAttribute('disabled');
-  }
+const togglePage = (activeFlag) => () => {
+  toggleForm(activeFlag, mapFiltersElement, mapFiltersDisabledClassName);
+  toggleForm(activeFlag, adFormElement, adFormDisabledClassName);
 };
-activateForm();
 
+const activatePage = togglePage(true);
+const deactivatePage = togglePage(false);
+
+export { activatePage, deactivatePage };
