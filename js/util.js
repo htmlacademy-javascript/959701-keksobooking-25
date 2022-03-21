@@ -59,9 +59,33 @@ const getRandomArrayPart = (arr) => {
 
 // Функция для получения случайного значения из объекта.
 
-const getRandomProperty = function (obj) {
+const getRandomProperty = (obj) => {
   const keys = Object.keys(obj);
   return obj[getArrayRandomElement(keys)];
+};
+
+// Функция проверки нажатия клавиши Escape
+
+const isEscapeKeyPressed = (evt) => evt.key === 'Escape';
+
+// Создание высплывающего окна
+
+const createPopup = (template) => {
+  const popup = template.cloneNode(true).querySelector('div');
+  document.body.append(popup);
+  const closePopup = () => {
+    popup.remove();
+    document.removeEventListener('keydown', keyCloseHandler);
+  };
+
+  function keyCloseHandler(evt) {
+    if (isEscapeKeyPressed(evt)) {
+      evt.preventDefault();
+      closePopup();
+    }
+  }
+  popup.addEventListener('click', () => closePopup());
+  document.addEventListener('keydown', keyCloseHandler);
 };
 
 export {
@@ -70,5 +94,7 @@ export {
   getRandomCoordinate,
   getNumberWithLeadZero,
   getRandomArrayPart,
-  getRandomProperty
+  getRandomProperty,
+  isEscapeKeyPressed,
+  createPopup
 };
