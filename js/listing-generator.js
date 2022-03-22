@@ -38,7 +38,7 @@ const getListing = (_el, i) => {
       title: `Заголовок объявления ${i + 1}`,
       address: `${lat}, ${lng}`,
       price: getRandomNumber(PriceRange.MIN, PriceRange.MAX),
-      type: getRandomProperty (TYPES),
+      type: getRandomProperty(TYPES),
       rooms: getRandomNumber(RoomsRange.MIN, RoomsRange.MAX),
       guests: getRandomNumber(GuestsRange.MIN, GuestsRange.MAX),
       checkin: getArrayRandomElement(CHECKIN),

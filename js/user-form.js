@@ -1,10 +1,28 @@
-import { createPopup } from './util.js';
-
-//Валидация формы
+import { isEscapeKeyPressed } from './util.js';
 
 const errorTemplate = document.querySelector('#error').content;
 const successTemplate = document.querySelector('#success').content;
 const form = document.querySelector('.ad-form');
+
+// Создание высплывающего окна
+
+const createPopup = (template) => {
+  const popup = template.cloneNode(true).querySelector('div');
+  document.body.append(popup);
+  const closePopup = () => {
+    popup.remove();
+    document.removeEventListener('keydown', keyCloseHandler);
+  };
+
+  function keyCloseHandler(evt) {
+    if (isEscapeKeyPressed(evt)) {
+      evt.preventDefault();
+      closePopup();
+    }
+  }
+  popup.addEventListener('click', () => closePopup());
+  document.addEventListener('keydown', keyCloseHandler);
+};
 
 const pristine = new Pristine(form, {
   classTo: 'ad-form__element',
@@ -27,6 +45,8 @@ const validateCapacity = () => maxGuests[roomNumberElement.value].includes(capac
 
 pristine.addValidator(capacity, validateCapacity, 'Количество гостей не соответствует количеству комнат');
 roomNumberElement.addEventListener('change', () => pristine.validate(capacity));
+
+// Валидация формы
 
 form.addEventListener('submit', (evt) => {
   if (pristine.validate()) {
