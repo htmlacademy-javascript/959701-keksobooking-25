@@ -1,19 +1,9 @@
 import { activatePage } from './page-status.js';
-import { getNewRandomListings, getListing } from './listing-generator.js';
-import { QUANTITY_OBJECTS } from './data.js';
-import { createOfferTemplate } from './template-card.js';
+import { DEFAULT_LOCATION } from './data.js';
 
-const offers = getNewRandomListings(QUANTITY_OBJECTS, getListing);
 const address = document.querySelector('#address');
 
-const map = L.map('map-canvas')
-  .on('load', () => {
-    activatePage();
-  })
-  .setView({
-    lat: 35.6894,
-    lng: 139.69235,
-  }, 12);
+const map = L.map('map-canvas').on('load', activatePage).setView(DEFAULT_LOCATION, 12);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -30,31 +20,19 @@ const mainPinIcon = L.icon({
   iconAnchor: [26, 52],
 });
 
-const mainPinMarker = L.marker(
-  {
-    lat: 35.6894,
-    lng: 139.69235,
-  },
-  {
-    draggable: true,
-    icon: mainPinIcon,
-  },
-);
-
+const mainPinMarker = L.marker(DEFAULT_LOCATION, {
+  draggable: true,
+  icon: mainPinIcon,
+});
 mainPinMarker.addTo(map);
 
-// Добавление координат по умолчанию в форму
+// Добавление координат в форму
 
-address.value = `${mainPinMarker._latlng.lat},${mainPinMarker._latlng.lng}`;
-
-// Данные для address в форме объявления
+const getLocationString = (({ lat, lng }) => `${lat.toFixed(5)}, ${lng.toFixed(5)}`);
 
 mainPinMarker.on('moveend', (evt) => {
-  const markerCoordinate = evt.target.getLatLng();
-  address.value = `${markerCoordinate.lat.toFixed(5)},${markerCoordinate.lng.toFixed(5)}`;
+  address.value = getLocationString(evt.target.getLatLng());
 });
-
-// mainPinMarker.remove(); удаление маркера
 
 // Маркер для размещенных объявлений
 
@@ -65,40 +43,23 @@ const icon = L.icon({
 });
 
 
-// Создание маркера объявления и popup
+// Создание маркера объявления
 
-const createMarker = ((offer) => {
-  const marker = L.marker(
-    {
-      lat: offer.location.lat,
-      lng: offer.location.lng,
-    },
-    {
-      icon: icon,
-    },
-  );
-  marker
+const createMarker = (location, popupContent) => {
+  L
+    .marker(location, { icon })
     .addTo(map)
-    .bindPopup(createOfferTemplate(offer));
-});
+    .bindPopup(popupContent);
+};
 
 // Сброс формы
 
 const resetButton = document.querySelector('.ad-form__reset');
 
 resetButton.addEventListener('click', () => {
-  mainPinMarker.setLatLng({
-    lat: 35.6894,
-    lng: 139.69235,
-  });
-  map.setView({
-    lat: 35.6894,
-    lng: 139.69235,
-  }, 12);
+  mainPinMarker.setLatLng(DEFAULT_LOCATION);
+  map.setView(DEFAULT_LOCATION, 12);
 }
 );
 
-export {
-  offers,
-  createMarker,
-};
+export { createMarker };
