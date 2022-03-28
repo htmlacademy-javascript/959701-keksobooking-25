@@ -1,13 +1,13 @@
 import { isEscapeKeyPressed } from './util.js';
 
-const errorTemplate = document.querySelector('#error').content;
-const successTemplate = document.querySelector('#success').content;
+const errorTemplate = document.querySelector('#error').content.querySelector('.error');
+const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const form = document.querySelector('.ad-form');
 
 // Создание высплывающего окна
 
 const createPopup = (template) => {
-  const popup = template.cloneNode(true).querySelector('div');
+  const popup = template.cloneNode(true);
   document.body.append(popup);
   const closePopup = () => {
     popup.remove();
