@@ -70,47 +70,13 @@ const GuestsRange = {
   MAX: 10
 };
 
-const typeToRangeConfig = {
-  flat: {
-    range: {
-      min: 1000,
-      max: 100000,
-    },
-    start: 1000,
-    step: 1000,
-  },
-  bungalow: {
-    range: {
-      min: 0,
-      max: 100000,
-    },
-    start: 0,
-    step: 1000,
-  },
-  hotel: {
-    range: {
-      min: 3000,
-      max: 100000,
-    },
-    start: 3000,
-    step: 1000,
-  },
-  house: {
-    range: {
-      min: 5000,
-      max: 100000,
-    },
-    start: 5000,
-    step: 1000,
-  },
-  palace: {
-    range: {
-      min: 10000,
-      max: 100000,
-    },
-    start: 10000,
-    step: 1000,
-  }
+const MAX_PRICE = 100000;
+const minToType = {
+  flat: 1000,
+  bungalow: 0,
+  hotel: 3000,
+  house: 5000,
+  palace: 10000,
 };
 
 export {
@@ -127,5 +93,6 @@ export {
   PriceRange,
   RoomsRange,
   GuestsRange,
-  typeToRangeConfig
+  MAX_PRICE,
+  minToType
 };

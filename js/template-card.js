@@ -1,4 +1,6 @@
-// Созадение шаблона объявления
+import { createMarker } from './map.js';
+
+// Создание шаблона объявления
 
 const fillELement = (element, list, getChild) => {
   if (list.length > 0) {
@@ -33,14 +35,15 @@ const createOfferTemplate = ({ author = {}, offer = {} }) => {
       element.remove();
     }
   });
+  // Когда у объявления пустой раздел feature, этот кусок кода не дает отрисовать объявление
+  // const featuresELement = card.querySelector('.popup__features');
+  // fillELement(featuresELement, offer.features, (feature) => {
+  //   const featureElement = document.createElement('li');
+  //   featureElement.className = `popup__feature popup__feature--${feature}`;
+  //   return featureElement;
+  // });
 
-  const featuresELement = card.querySelector('.popup__features');
-  fillELement(featuresELement, offer.features, (feature) => {
-    const featureElement = document.createElement('li');
-    featureElement.className = `popup__feature popup__feature--${feature}`;
-    return featureElement;
-  });
-
+  // Полагаю, сейчас ошибка в консоли из-за попытки отрисовать объявления без фото
   const photosElement = card.querySelector('.popup__photos');
   const photoSampleELement = photosElement.querySelector('.popup__photo');
   fillELement(photosElement, offer.photos, (photo) => {
@@ -58,4 +61,12 @@ const createOfferTemplate = ({ author = {}, offer = {} }) => {
   return card;
 };
 
-export { createOfferTemplate };
+// Отрисовка объявления и маркера
+
+const renderListings = (listings) => {
+  listings.forEach((offer) => {
+    createMarker(offer.location, createOfferTemplate(offer));
+  });
+};
+
+export { createOfferTemplate, renderListings };

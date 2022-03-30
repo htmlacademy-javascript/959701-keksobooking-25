@@ -1,14 +1,7 @@
-import './user-form.js';
 import './slider.js';
-import { QUANTITY_OBJECTS, } from './data.js';
-import { getListing, getNewRandomListings } from './listing-generator.js';
-import { createOfferTemplate } from './template-card.js';
-import { createMarker } from './map.js';
+import './user-form.js';
+import { createLoader } from './api.js';
+import { renderListings } from './template-card.js';
 
-const offers = getNewRandomListings(QUANTITY_OBJECTS, getListing);
+createLoader(renderListings);
 
-// Добавление объявлений
-
-offers.forEach((offer) => {
-  createMarker(offer.location, createOfferTemplate(offer));
-});

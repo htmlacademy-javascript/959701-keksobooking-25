@@ -1,8 +1,17 @@
 import { isEscapeKeyPressed } from './util.js';
+import { sendData } from './api.js';
+import { minToType } from './data.js';
+import { createUISlider, updateSlider } from './slider.js';
 
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
+const loadingErrorTemplate = document.querySelector('#loadingerror').content.querySelector('.error');
 const form = document.querySelector('.ad-form');
+const filter = document.querySelector('.map__filters');
+const accommodationTypeElement = document.querySelector('#type');
+const sliderPrice = document.querySelector('.ad-form__slider');
+const priceValue = document.querySelector('#price');
+const priceElement = createUISlider(sliderPrice);
 
 // Создание высплывающего окна
 
@@ -46,13 +55,25 @@ const validateCapacity = () => maxGuests[roomNumberElement.value].includes(capac
 pristine.addValidator(capacity, validateCapacity, 'Количество гостей не соответствует количеству комнат');
 roomNumberElement.addEventListener('change', () => pristine.validate(capacity));
 
-// Валидация формы
+// Передача значения ползунка в форму
 
-form.addEventListener('submit', (evt) => {
-  if (pristine.validate()) {
-    return createPopup(successTemplate);
-  }
-  evt.preventDefault();
-  createPopup(errorTemplate);
+priceElement.on('slide', () => {
+  priceValue.value = priceElement.get();
 });
 
+accommodationTypeElement.addEventListener('change', (evt) => {
+  updateSlider(priceElement, minToType[evt.target.value]);
+});
+
+form.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  const isValid = pristine.validate();
+  if (!isValid) { return createPopup(errorTemplate); }
+  createPopup(successTemplate);
+  const formData = new FormData(evt.target);
+  sendData(formData);
+  filter.reset();
+  form.reset();
+});
+
+export { createPopup, loadingErrorTemplate };

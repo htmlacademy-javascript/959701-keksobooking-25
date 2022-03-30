@@ -42,7 +42,6 @@ const icon = L.icon({
   iconAnchor: [20, 40],
 });
 
-
 // Создание маркера объявления
 
 const createMarker = (location, popupContent) => {
