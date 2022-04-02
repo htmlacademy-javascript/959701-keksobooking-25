@@ -39,9 +39,22 @@ priceElement.on('slide', () => {
   priceValue.value = priceElement.get();
 });
 
+// Изменение значения плейсхолдера
+
 accommodationTypeElement.addEventListener('change', (evt) => {
-  updateSlider(priceElement, minToType[evt.target.value].min);
+  const minPrice = minToType[evt.target.value].min;
+  updateSlider(priceElement, minPrice);
+  priceValue.placeholder =  minPrice;
+  priceValue.value = '';
 });
+
+// Валидация введенной цены за жилье
+
+const validatePrice = () => Number(priceValue.value) >= Number(priceValue.placeholder);
+
+pristine.addValidator(priceValue, validatePrice, 'Ввведите значение больше минимальной суммы');
+
+accommodationTypeElement.addEventListener('change', () => pristine.validate(priceValue));
 
 formElement.addEventListener('submit', (evt) => {
   evt.preventDefault();
