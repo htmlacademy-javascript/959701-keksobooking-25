@@ -18,7 +18,7 @@ const pristine = new Pristine(formElement, {
   errorTextParent: 'ad-form__element'
 });
 
-// Проверка соответствия количества комнат количеству гостей.
+// Проверка соответствия количества комнат количеству гостей
 
 const roomNumberElement = formElement.querySelector('[name="rooms"]');
 const capacity = formElement.querySelector('[name="capacity"]');
