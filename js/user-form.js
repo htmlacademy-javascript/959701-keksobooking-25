@@ -10,6 +10,8 @@ const accommodationTypeElement = document.querySelector('#type');
 const sliderPrice = document.querySelector('.ad-form__slider');
 const priceValue = document.querySelector('#price');
 const priceElement = createUISlider(sliderPrice);
+const timein = document.querySelector('#timein');
+const timeout = document.querySelector('#timeout');
 
 const pristine = new Pristine(formElement, {
   classTo: 'ad-form__element',
@@ -55,6 +57,16 @@ const validatePrice = () => Number(priceValue.value) >= Number(priceValue.placeh
 pristine.addValidator(priceValue, validatePrice, 'Ввведите значение больше минимальной суммы');
 
 accommodationTypeElement.addEventListener('change', () => pristine.validate(priceValue));
+
+// Обработка поля  «Время заезда-выезда»
+
+timein.addEventListener('change', () => {
+  timeout.value = timein.value;
+});
+
+timeout.addEventListener('change', () => {
+  timein.value = timeout.value;
+});
 
 formElement.addEventListener('submit', (evt) => {
   evt.preventDefault();
