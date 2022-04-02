@@ -1,43 +1,34 @@
-import { loadingErrorTemplate, createPopup } from './user-form.js';
+import { createPopup } from './popup.js';
 
-const DATA = 'https://25.javascript.pages.academy/keksobooking/data';
 const SERVER = 'https://25.javascript.pages.academy/keksobooking';
+const DATA_URL = `${SERVER}/data`;
 
 // Загрузка объявлений с сервера
 
-const createLoader = (onSuccess) => (fetch(DATA,
+const receiveData = (onSuccess) => fetch(DATA_URL,
   {
     method: 'GET',
     credentials: 'same-origin',
   })
-  .then((response) => {
-    if (response.ok) {
-      return response.json();
-    }
-    if (response.status === 400) {
-      return createPopup(loadingErrorTemplate);
-    }
-    if (response.status === 403) {
-      return createPopup(loadingErrorTemplate);
-    }
-    if (response.status === 404) {
-      return createPopup(loadingErrorTemplate);
-    }
-    if (response.status === 500) {
-      return createPopup(loadingErrorTemplate);
-    }
-  })
-  .then((data) => {
-    onSuccess(data);
-  }));
+  .then((res) => res.json())
+  .then(onSuccess)
+  .catch(() => {
+    createPopup(false, (popupElement) => {
+      popupElement.querySelector('.error__message').textContent = 'Ошибка получения объявлений';
+      popupElement.querySelector('.error__button').textContent = 'Добавить объявление';
+    });
+    return [];
+  });
 
-// Отправка данных
+// Отправка объявления на сервер
 
-const sendData = (data) => (fetch(SERVER,
+const sendData = (data) => fetch(SERVER,
   {
     method: 'POST',
     body: data,
-  },
-));
+  })
+  .then(({ ok }) => {
+    createPopup(ok);
+  });
 
-export { createLoader, sendData };
+export { receiveData, sendData };

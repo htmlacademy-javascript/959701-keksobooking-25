@@ -1,14 +1,5 @@
 // Фиксированные данные
 
-const TYPES = {
-  palace: 'Дворец',
-  flat: 'Квартира',
-  house: 'Дом',
-  bungalow: 'Бунгало',
-  hotel: 'Отель'
-};
-
-
 const CHECKIN = [
   '12:00',
   '13:00',
@@ -71,16 +62,31 @@ const GuestsRange = {
 };
 
 const MAX_PRICE = 100000;
+
 const minToType = {
-  flat: 1000,
-  bungalow: 0,
-  hotel: 3000,
-  house: 5000,
-  palace: 10000,
+  palace: {
+    title: 'Дворец',
+    min: 10000,
+  },
+  flat: {
+    title: 'Квартира',
+    min: 1000,
+  },
+  house: {
+    title: 'Дом',
+    min: 5000,
+  },
+  bungalow: {
+    title: 'Бунгало',
+    min: 0,
+  },
+  hotel: {
+    title: 'Отель',
+    min: 3000,
+  },
 };
 
 export {
-  TYPES,
   CHECKIN,
   CHECKOUT,
   FEATURES,

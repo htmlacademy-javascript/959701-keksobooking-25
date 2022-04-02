@@ -1,7 +1,13 @@
 import './slider.js';
 import './user-form.js';
-import { createLoader } from './api.js';
-import { renderListings } from './template-card.js';
+import { createMarker } from './map.js';
+import { receiveData } from './api.js';
+import { createOfferTemplate } from './template-card.js';
 
-createLoader(renderListings);
+const renderListings = (listings) => {
+  listings.forEach((offer) => {
+    createMarker(offer.location, createOfferTemplate(offer));
+  });
+};
 
+receiveData(renderListings);
