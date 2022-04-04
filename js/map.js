@@ -42,7 +42,6 @@ const icon = L.icon({
   iconAnchor: [20, 40],
 });
 
-
 // Создание маркера объявления
 
 const createMarker = (location, popupContent) => {
@@ -56,10 +55,14 @@ const createMarker = (location, popupContent) => {
 
 const resetButton = document.querySelector('.ad-form__reset');
 
-resetButton.addEventListener('click', () => {
+const nameStartMapSettings = () => {
   mainPinMarker.setLatLng(DEFAULT_LOCATION);
-  map.setView(DEFAULT_LOCATION, 12);
+  map.closePopup().setView(DEFAULT_LOCATION, 12);
+};
+
+resetButton.addEventListener('click', () => {
+  nameStartMapSettings();
 }
 );
 
-export { createMarker };
+export { createMarker, map, mainPinMarker, nameStartMapSettings };

@@ -1,41 +1,20 @@
-import { typeToRangeConfig } from './data.js';
-
-const sliderPrice = document.querySelector('.ad-form__slider');
-const priceValue = document.querySelector('#price');
-const accommodationType = document.querySelector('#type');
+import { MAX_PRICE } from './data.js';
 
 // Создание слайдера
 
-noUiSlider.create(sliderPrice, {
+const createTypeRangeConfig = (min) => ({
   range: {
-    min: 1000,
-    max: 100000,
+    min,
+    max: MAX_PRICE
   },
-  start: 0,
+  start: min,
   step: 1000,
-  connect: 'lower',
-  format: {
-    to: function (value) {
-      if (Number.isInteger(value)) {
-        return value.toFixed(0);
-      }
-      return value.toFixed(0);
-    },
-    from: function (value) {
-      return parseFloat(value);
-    },
-  }
 });
 
-/*Попытка написать функцию для генерации слайдера
-const createUISlider = (formElement) => {
+const createUISlider = (formElement, start = 0) => {
   noUiSlider.create(formElement, {
-    range: {
-      min: 0,
-      max: 100000,
-    },
-    start: 0,
-    step: 1000,
+    ...createTypeRangeConfig(0),
+    start,
     connect: 'lower',
     format: {
       to: function (value) {
@@ -49,18 +28,9 @@ const createUISlider = (formElement) => {
       },
     }
   });
+  return formElement.noUiSlider;
 };
-createUISlider(sliderPrice);
 
-const priceSlider = createUISlider(sliderPrice); пробовала подставить в виде такой переменной
-*/
+const updateSlider = (slider, value) => slider.updateOptions(createTypeRangeConfig(value));
 
-// Отправка значения ползунка в форму объявления
-
-sliderPrice.noUiSlider.on('slide', () => {
-  priceValue.value = sliderPrice.noUiSlider.get();
-});
-
-accommodationType.addEventListener('change', (evt) => {
-  sliderPrice.noUiSlider.updateOptions(typeToRangeConfig[evt.target.value]);
-});
+export { createUISlider, createTypeRangeConfig, updateSlider };
