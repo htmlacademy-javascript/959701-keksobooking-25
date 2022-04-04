@@ -1,27 +1,22 @@
-import { minToType } from './data.js';
-import { createUISlider, updateSlider } from './slider.js';
-import { createPopup } from './popup.js';
+import { offerTypes, MAX_PRICE, roomToGuests } from './data.js';
+import { createUISlider } from './slider.js';
 import { sendData } from './api.js';
-import { nameStartMapSettings } from './map.js';
+import { resetMapSettings } from './map.js';
+import { filterElement } from './filter.js';
+import { declineNum } from './util.js';
 
-const formElement = document.querySelector('.ad-form');
-const filterElement = document.querySelector('.map__filters');
+const PRICE_VALIDATION_PRIORITY = 1000;
+
+const adformElement = document.querySelector('.ad-form');
 const accommodationTypeElement = document.querySelector('#type');
 const sliderPrice = document.querySelector('.ad-form__slider');
-const priceValue = document.querySelector('#price');
-const priceElement = createUISlider(sliderPrice);
-const timein = document.querySelector('#timein');
-const timeout = document.querySelector('#timeout');
-
-const pristine = new Pristine(formElement, {
-  classTo: 'ad-form__element',
-  errorTextParent: 'ad-form__element'
-});
-
-// Проверка соответствия количества комнат количеству гостей
-
-const roomNumberElement = formElement.querySelector('[name="rooms"]');
-const capacity = formElement.querySelector('[name="capacity"]');
+const priceValueElement = document.querySelector('#price');
+const priceFieldElement = createUISlider(sliderPrice);
+const timeinFieldElement = document.querySelector('#timein');
+const timeoutFieldElement = document.querySelector('#timeout');
+const roomNumberElement = adformElement.querySelector('[name="rooms"]');
+const capacityElement = adformElement.querySelector('[name="capacity"]');
+const initialType = accommodationTypeElement.value;
 
 const maxGuests = {
   1: ['1'],
@@ -30,51 +25,83 @@ const maxGuests = {
   100: ['0']
 };
 
-const validateCapacity = () => maxGuests[roomNumberElement.value].includes(capacity.value);
+const pristine = new Pristine(adformElement, {
+  classTo: 'ad-form__element',
+  errorTextParent: 'ad-form__element'
+});
 
-pristine.addValidator(capacity, validateCapacity, 'Количество гостей не соответствует количеству комнат');
-roomNumberElement.addEventListener('change', () => pristine.validate(capacity));
+// Проверка соответствия количества комнат количеству гостей
+
+const validateCapacity = () => maxGuests[roomNumberElement.value].includes(capacityElement.value);
+
+const getCapacityMessage = () => {
+  const rooms = declineNum(roomNumberElement.value, 'комнаты', 'комнат');
+  const validGuests = roomToGuests[roomNumberElement.value];
+  return `Для ${rooms} допустимо гостей: ${validGuests.join(', ')}`;
+};
+
+pristine.addValidator(capacityElement, validateCapacity, getCapacityMessage);
+roomNumberElement.addEventListener('change', () => pristine.validate(capacityElement));
 
 // Передача значения ползунка в форму
 
-priceElement.on('slide', () => {
-  priceValue.value = priceElement.get();
+priceFieldElement.on('slide', () => {
+  priceValueElement.value = priceFieldElement.get();
+  pristine.validate(priceFieldElement);
 });
 
-// Изменение значения плейсхолдера
+// Изменение значения плейсхолдера стоимости жилья
 
-accommodationTypeElement.addEventListener('change', (evt) => {
-  const minPrice = minToType[evt.target.value].min;
-  updateSlider(priceElement, minPrice);
-  priceValue.placeholder =  minPrice;
-  priceValue.value = '';
+const setPriceAttributes = (type) => {
+  const minPrice = offerTypes[type].min;
+  priceValueElement.min = minPrice;
+  priceValueElement.placeholder = minPrice;
+};
+setPriceAttributes(initialType);
+
+const changeType = (type = accommodationTypeElement.value) => {
+  setPriceAttributes(type);
+  priceFieldElement.updateOptions({
+    range: {
+      min: offerTypes[type].min,
+      max: MAX_PRICE,
+    },
+  });
+};
+
+accommodationTypeElement.addEventListener('change', () => {
+  changeType();
+  pristine.validate(priceValueElement);
 });
 
 // Валидация введенной цены за жилье
 
-const validatePrice = () => Number(priceValue.value) >= Number(priceValue.placeholder);
+const validatePrice = () => Number(priceValueElement.value) >= Number(priceValueElement.placeholder);
 
-pristine.addValidator(priceValue, validatePrice, 'Ввведите значение больше минимальной суммы');
+const getPriceMessage = () => `Выберите число между ${priceValueElement.placeholder} и ${MAX_PRICE}`;
 
-accommodationTypeElement.addEventListener('change', () => pristine.validate(priceValue));
+pristine.addValidator(priceValueElement, validatePrice, getPriceMessage, PRICE_VALIDATION_PRIORITY, true);
 
 // Обработка поля  «Время заезда-выезда»
 
-timein.addEventListener('change', () => {
-  timeout.value = timein.value;
+timeinFieldElement.addEventListener('change', () => {
+  timeoutFieldElement.value = timeinFieldElement.value;
 });
 
-timeout.addEventListener('change', () => {
-  timein.value = timeout.value;
+timeoutFieldElement.addEventListener('change', () => {
+  timeinFieldElement.value = timeoutFieldElement.value;
 });
 
-formElement.addEventListener('submit', (evt) => {
+adformElement.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  if (!pristine.validate()) { return createPopup(false); }
+  if (!pristine.validate()) {
+    adformElement.querySelector('.has-danger [name]').focus();
+    adformElement.querySelector('.text-help').classList.add('pristine-error');
+    return;
+  }
   const formData = new FormData(evt.target);
   sendData(formData);
   filterElement.reset();
-  formElement.reset();
-  nameStartMapSettings();
+  adformElement.reset();
+  resetMapSettings();
 });
-

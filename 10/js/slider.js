@@ -33,4 +33,4 @@ const createUISlider = (formElement, start = 0) => {
 
 const updateSlider = (slider, value) => slider.updateOptions(createTypeRangeConfig(value));
 
-export { createUISlider, createTypeRangeConfig, updateSlider };
+export { createUISlider, updateSlider };

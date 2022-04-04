@@ -5,11 +5,10 @@ const DATA_URL = `${SERVER}/data`;
 
 // Загрузка объявлений с сервера
 
-const receiveData = (onSuccess) => fetch(DATA_URL,
-  {
-    method: 'GET',
-    credentials: 'same-origin',
-  })
+const receiveData = (onSuccess) => fetch(DATA_URL, {
+  method: 'GET',
+  credentials: 'same-origin',
+})
   .then((res) => res.json())
   .then(onSuccess)
   .catch(() => {
@@ -22,13 +21,16 @@ const receiveData = (onSuccess) => fetch(DATA_URL,
 
 // Отправка объявления на сервер
 
-const sendData = (data) => fetch(SERVER,
-  {
-    method: 'POST',
-    body: data,
-  })
+const sendData = (data) => fetch(SERVER, {
+  method: 'POST',
+  body: data,
+})
   .then(({ ok }) => {
     createPopup(ok);
+  })
+  .catch(() => {
+    createPopup(false);
   });
 
 export { receiveData, sendData };
+

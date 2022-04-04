@@ -28,4 +28,4 @@ const createPopup = (isSucces = true, modifyPopup = null) => {
   document.addEventListener('keydown', keyCloseHandler);
 };
 
-export { createPopup, errorTemplate };
+export { createPopup };
