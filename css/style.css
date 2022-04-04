@@ -1032,6 +1032,12 @@ fieldset {
   opacity: 0.6;
 }
 
+.pristine-error {
+  margin: 5px 0 10px;
+  font-size: 12px;
+  color: #ff5635;
+}
+
 .visually-hidden {
   position: absolute;
 

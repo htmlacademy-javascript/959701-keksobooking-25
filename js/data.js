@@ -63,7 +63,7 @@ const GuestsRange = {
 
 const MAX_PRICE = 100000;
 
-const minToType = {
+const offerTypes = {
   palace: {
     title: 'Дворец',
     min: 10000,
@@ -86,6 +86,13 @@ const minToType = {
   },
 };
 
+const roomToGuests = {
+  1: ['1'],
+  2: ['1', '2'],
+  3: ['1', '2', '3'],
+  100: ['0'],
+};
+
 export {
   CHECKIN,
   CHECKOUT,
@@ -100,5 +107,6 @@ export {
   RoomsRange,
   GuestsRange,
   MAX_PRICE,
-  minToType
+  offerTypes,
+  roomToGuests,
 };
