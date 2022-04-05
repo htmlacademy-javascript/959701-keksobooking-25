@@ -1,6 +1,6 @@
-
+const DECLINE_THRESHOLD = 5;
+const DECLINE_TAILSTART = -2;
 // Вспомогательные функции
-
 
 // Функция, возвращающая значение элемента массива в рандомном порядке
 // Источник: https://expange.ru/e/%D0%A1%D0%BB%D1%83%D1%87%D0%B0%D0%B9%D0%BD%D1%8B%D0%B9_%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82_%D0%BC%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D0%B0_(JavaScript)
@@ -68,6 +68,22 @@ const getRandomProperty = (obj) => {
 
 const isEscapeKeyPressed = (evt) => evt.key === 'Escape';
 
+// Корректировка существительных после числительных
+
+const declineNum = (num, nominative, genitiveSingular = nominative, genitivePlural = genitiveSingular) => {
+  let answer = genitivePlural;
+  const numLast = parseInt(num.toString().slice(-1), 10);
+  const numLastDecim = parseInt(num.toString().slice(DECLINE_TAILSTART, -1), 10);
+  if (numLastDecim !== 1) {
+    if (numLast === 1) {
+      answer = nominative;
+    } else if (numLast > 1 && numLast < DECLINE_THRESHOLD) {
+      answer = genitiveSingular;
+    }
+  }
+  return `${num} ${answer}`;
+};
+
 export {
   getArrayRandomElement,
   getRandomNumber,
@@ -76,4 +92,5 @@ export {
   getRandomArrayPart,
   getRandomProperty,
   isEscapeKeyPressed,
+  declineNum
 };

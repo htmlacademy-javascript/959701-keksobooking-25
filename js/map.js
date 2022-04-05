@@ -55,14 +55,14 @@ const createMarker = (location, popupContent) => {
 
 const resetButton = document.querySelector('.ad-form__reset');
 
-const nameStartMapSettings = () => {
+const resetMapSettings = () => {
   mainPinMarker.setLatLng(DEFAULT_LOCATION);
   map.closePopup().setView(DEFAULT_LOCATION, 12);
 };
 
 resetButton.addEventListener('click', () => {
-  nameStartMapSettings();
+  resetMapSettings();
 }
 );
 
-export { createMarker, map, mainPinMarker, nameStartMapSettings };
+export { createMarker, map, mainPinMarker, resetMapSettings };
