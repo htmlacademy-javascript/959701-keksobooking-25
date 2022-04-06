@@ -9,21 +9,14 @@ const PRICE_VALIDATION_PRIORITY = 1000;
 
 const adformElement = document.querySelector('.ad-form');
 const accommodationTypeElement = document.querySelector('#type');
-const sliderPrice = document.querySelector('.ad-form__slider');
+const priceSliderElement = document.querySelector('.ad-form__slider');
 const priceValueElement = document.querySelector('#price');
-const priceFieldElement = createUISlider(sliderPrice);
+const priceSlider = createUISlider(priceSliderElement);
 const timeinFieldElement = document.querySelector('#timein');
 const timeoutFieldElement = document.querySelector('#timeout');
 const roomNumberElement = adformElement.querySelector('[name="rooms"]');
 const capacityElement = adformElement.querySelector('[name="capacity"]');
 const initialType = accommodationTypeElement.value;
-
-const maxGuests = {
-  1: ['1'],
-  2: ['1', '2'],
-  3: ['1', '2', '3'],
-  100: ['0']
-};
 
 const pristine = new Pristine(adformElement, {
   classTo: 'ad-form__element',
@@ -32,7 +25,7 @@ const pristine = new Pristine(adformElement, {
 
 // Проверка соответствия количества комнат количеству гостей
 
-const validateCapacity = () => maxGuests[roomNumberElement.value].includes(capacityElement.value);
+const validateCapacity = () => roomToGuests[roomNumberElement.value].includes(capacityElement.value);
 
 const getCapacityMessage = () => {
   const rooms = declineNum(roomNumberElement.value, 'комнаты', 'комнат');
@@ -45,9 +38,9 @@ roomNumberElement.addEventListener('change', () => pristine.validate(capacityEle
 
 // Передача значения ползунка в форму
 
-priceFieldElement.on('slide', () => {
-  priceValueElement.value = priceFieldElement.get();
-  pristine.validate(priceFieldElement);
+priceSlider.on('slide', () => {
+  priceValueElement.value = priceSlider.get();
+  pristine.validate(priceSlider);
 });
 
 // Изменение значения плейсхолдера стоимости жилья
@@ -61,7 +54,7 @@ setPriceAttributes(initialType);
 
 const changeType = (type = accommodationTypeElement.value) => {
   setPriceAttributes(type);
-  priceFieldElement.updateOptions({
+  priceSlider.updateOptions({
     range: {
       min: offerTypes[type].min,
       max: MAX_PRICE,
@@ -96,7 +89,6 @@ adformElement.addEventListener('submit', (evt) => {
   evt.preventDefault();
   if (!pristine.validate()) {
     adformElement.querySelector('.has-danger [name]').focus();
-    adformElement.querySelector('.text-help').classList.add('pristine-error');
     return;
   }
   const formData = new FormData(evt.target);
