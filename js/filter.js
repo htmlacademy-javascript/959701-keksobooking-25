@@ -50,7 +50,7 @@ filterElement.addEventListener('change', () => {
   receiveData((data) => {
     removeMapPin();
     const offers = data.slice();
-    debounce(renderListings(filterOffers(offers), RERENDER_DELAY));
+    debounce(renderListings(filterOffers(offers.slice(0, QUANTITY_OFFERS)), RERENDER_DELAY));
   });
 });
 
