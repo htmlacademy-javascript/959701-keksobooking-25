@@ -1,9 +1,15 @@
 import { activatePage } from './page-status.js';
 import { DEFAULT_LOCATION } from './data.js';
+import { filterElement } from './filter.js';
+import { receiveData } from './api.js';
+import { QUANTITY_OFFERS } from './data.js';
+import { createOfferTemplate } from './template-card.js';
 
 const address = document.querySelector('#address');
 
 const map = L.map('map-canvas').on('load', activatePage).setView(DEFAULT_LOCATION, 12);
+
+const markerGroup = L.layerGroup().addTo(map);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -47,8 +53,22 @@ const icon = L.icon({
 const createMarker = (location, popupContent) => {
   L
     .marker(location, { icon })
-    .addTo(map)
+    .addTo(markerGroup)
     .bindPopup(popupContent);
+};
+
+// Отрисовка маркеров и объявлений
+
+const renderListings = (listings) => {
+  listings.forEach((offer) => {
+    createMarker(offer.location, createOfferTemplate(offer));
+  });
+};
+
+// Удаление маркеров
+
+const removeMapPin = () => {
+  markerGroup.clearLayers();
 };
 
 // Сброс формы
@@ -58,11 +78,16 @@ const resetButton = document.querySelector('.ad-form__reset');
 const resetMapSettings = () => {
   mainPinMarker.setLatLng(DEFAULT_LOCATION);
   map.closePopup().setView(DEFAULT_LOCATION, 12);
+  filterElement.reset();
+  receiveData((data) => {
+    renderListings(data.slice(0, QUANTITY_OFFERS));
+  });
+
 };
 
 resetButton.addEventListener('click', () => {
   resetMapSettings();
-}
-);
+});
 
-export { createMarker, map, mainPinMarker, resetMapSettings };
+
+export { createMarker, map, mainPinMarker, resetMapSettings, removeMapPin, renderListings };

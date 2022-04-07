@@ -84,6 +84,16 @@ const declineNum = (num, nominative, genitiveSingular = nominative, genitivePlur
   return `${num} ${answer}`;
 };
 
+// Устранение "дребезга"
+
+const debounce = (callback, timeoutDelay) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
 export {
   getArrayRandomElement,
   getRandomNumber,
@@ -92,5 +102,6 @@ export {
   getRandomArrayPart,
   getRandomProperty,
   isEscapeKeyPressed,
-  declineNum
+  declineNum,
+  debounce
 };
