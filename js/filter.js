@@ -51,8 +51,8 @@ const filterOffers = (data) => {
 filterElement.addEventListener('change', () => {
   receiveData((data) => {
     removeMapPin();
-    const offers = data.slice();
-    debounce(renderListings(filterOffers(offers.slice(0, QUANTITY_OFFERS)), RERENDER_DELAY));
+    const offers = data.slice(0, QUANTITY_OFFERS);
+    debounce(renderListings(filterOffers(offers), RERENDER_DELAY));
   });
 });
 
