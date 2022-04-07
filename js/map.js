@@ -2,8 +2,8 @@ import { activatePage } from './page-status.js';
 import { DEFAULT_LOCATION } from './data.js';
 import { filterElement } from './filter.js';
 import { receiveData } from './api.js';
-import { renderListings } from './main.js';
 import { QUANTITY_OFFERS } from './data.js';
+import { createOfferTemplate } from './template-card.js';
 
 const address = document.querySelector('#address');
 
@@ -57,6 +57,20 @@ const createMarker = (location, popupContent) => {
     .bindPopup(popupContent);
 };
 
+// Отрисовка маркеров и объявлений
+
+const renderListings = (listings) => {
+  listings.forEach((offer) => {
+    createMarker(offer.location, createOfferTemplate(offer));
+  });
+};
+
+// Удаление маркеров
+
+const removeMapPin = () => {
+  markerGroup.clearLayers();
+};
+
 // Сброс формы
 
 const resetButton = document.querySelector('.ad-form__reset');
@@ -75,8 +89,5 @@ resetButton.addEventListener('click', () => {
   resetMapSettings();
 });
 
-const removeMapPin = () => {
-  markerGroup.clearLayers();
-};
 
-export { createMarker, map, mainPinMarker, resetMapSettings, removeMapPin };
+export { createMarker, map, mainPinMarker, resetMapSettings, removeMapPin, renderListings };

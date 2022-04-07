@@ -1,6 +1,5 @@
 import { receiveData } from './api.js';
-import { removeMapPin } from './map.js';
-import { renderListings } from './main.js';
+import { removeMapPin, renderListings } from './map.js';
 import { QUANTITY_OFFERS } from './data.js';
 import { debounce } from './util.js';
 
@@ -29,6 +28,9 @@ const filterRules = {
   'housing-rooms': (data, filter) => filter.value === data.offer.rooms.toString(),
   'housing-guests': (data, filter) => filter.value === data.offer.guests.toString(),
   'housing-features': (data, filter) => {
+    if (!data.offer.features) {
+      return false;
+    }
     const checkedCheckboxes = Array.from(filter.querySelectorAll('input[type="checkbox"]:checked'));
     return checkedCheckboxes.every((checkbox) => data.offer.features.some((feature) => feature === checkbox.value));
   },
