@@ -1,45 +1,28 @@
+// Загрузка и отрисовка превью фото
+
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
-const inputAvatar = document.querySelector('.ad-form-header__input[type=file]');
-const inputHousePhoto = document.querySelector('#images[type=file]');
-const previewAvatar = document.querySelector('#userAvatar');
-const previewHousePhoto = document.querySelector('.ad-form__photo');
 
-// Загрузка и отрисовка превью изображений
-
-const getPreviewAvatar = (fileChooser, photo) => {
+const getPreviewPhoto = (fileChooser, photoPreview) => {
   const file = fileChooser.files[0];
   const fileName = file.name.toLowerCase();
+  const otherPhoto = photoPreview.querySelector('img');
   const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
 
-  if (matches) {
-    photo.src = URL.createObjectURL(file);
+  if (photoPreview.contains(otherPhoto)) {
+    otherPhoto.style.visibility = 'hidden';
   }
-};
-
-const getPreviewHousePhoto = (fileChooser, photoPreview) => {
-  const file = fileChooser.files[0];
-  const fileName = file.name.toLowerCase();
-  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
 
   if (matches) {
     const reader = new FileReader();
 
     reader.addEventListener('load', () => {
-      photoPreview.style.background = `url(${reader.result}`;
+      photoPreview.style.backgroundImage = `url(${reader.result}`;
       photoPreview.style.backgroundSize = 'cover';
-      photoPreview.style.backgroundRepeat = 'no-repeat';
     });
 
     reader.readAsDataURL(file);
   }
 };
 
-inputAvatar.addEventListener('change', () => {
-  getPreviewAvatar(inputAvatar, previewAvatar);
-});
+export { getPreviewPhoto };
 
-inputHousePhoto.addEventListener('change', () => {
-  getPreviewHousePhoto(inputHousePhoto, previewHousePhoto);
-});
-
-export { inputAvatar, inputHousePhoto };

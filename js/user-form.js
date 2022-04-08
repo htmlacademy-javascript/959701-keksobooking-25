@@ -4,6 +4,7 @@ import { sendData } from './api.js';
 import { resetMapSettings } from './map.js';
 import { filterElement } from './filter.js';
 import { declineNum } from './util.js';
+import { getPreviewPhoto } from './pic-uploader.js';
 
 const PRICE_VALIDATION_PRIORITY = 1000;
 
@@ -17,6 +18,12 @@ const timeoutFieldElement = document.querySelector('#timeout');
 const roomNumberElement = adformElement.querySelector('[name="rooms"]');
 const capacityElement = adformElement.querySelector('[name="capacity"]');
 const initialType = accommodationTypeElement.value;
+const inputAvatar = adformElement.querySelector('.ad-form-header__input[type=file]');
+const inputHousePhoto = adformElement.querySelector('#images[type=file]');
+const previewAvatar = adformElement.querySelector('.ad-form-header__preview');
+const defaultAvatar = previewAvatar.querySelector('img');
+const previewHousePhoto = adformElement.querySelector('.ad-form__photo');
+const resetButton = document.querySelector('.ad-form__reset');
 
 const pristine = new Pristine(adformElement, {
   classTo: 'ad-form__element',
@@ -85,6 +92,33 @@ timeoutFieldElement.addEventListener('change', () => {
   timeinFieldElement.value = timeoutFieldElement.value;
 });
 
+// Загрузка превью фото
+
+inputAvatar.addEventListener('change', () => {
+  getPreviewPhoto(inputAvatar, previewAvatar);
+});
+
+inputHousePhoto.addEventListener('change', () => {
+  getPreviewPhoto(inputHousePhoto, previewHousePhoto);
+});
+
+// Сброс формы, карты к начальным настройкам
+
+const resetAllSettings = () => {
+  resetMapSettings();
+  filterElement.reset();
+  adformElement.reset();
+  previewAvatar.style.backgroundImage = '';
+  previewHousePhoto.style.backgroundImage = '';
+  defaultAvatar.style.visibility = 'visible';
+};
+
+// Сброс формы по кнопке "Очистить"
+
+resetButton.addEventListener('click', () => {
+  resetAllSettings();
+});
+
 adformElement.addEventListener('submit', (evt) => {
   evt.preventDefault();
   if (!pristine.validate()) {
@@ -93,7 +127,5 @@ adformElement.addEventListener('submit', (evt) => {
   }
   const formData = new FormData(evt.target);
   sendData(formData);
-  filterElement.reset();
-  adformElement.reset();
-  resetMapSettings();
+  resetAllSettings();
 });
