@@ -5,7 +5,7 @@ import { receiveData } from './api.js';
 import { QUANTITY_OFFERS } from './data.js';
 import { createOfferTemplate } from './template-card.js';
 
-const address = document.querySelector('#address');
+const addressElement = document.querySelector('#address');
 
 const map = L.map('map-canvas').on('load', activatePage).setView(DEFAULT_LOCATION, 12);
 
@@ -37,7 +37,7 @@ mainPinMarker.addTo(map);
 const getLocationString = (({ lat, lng }) => `${lat.toFixed(5)}, ${lng.toFixed(5)}`);
 
 mainPinMarker.on('moveend', (evt) => {
-  address.value = getLocationString(evt.target.getLatLng());
+  addressElement.value = getLocationString(evt.target.getLatLng());
 });
 
 // Маркер для размещенных объявлений
@@ -71,9 +71,7 @@ const removeMapPin = () => {
   markerGroup.clearLayers();
 };
 
-// Сброс формы
-
-const resetButton = document.querySelector('.ad-form__reset');
+// Сброс к начальным настройкам карты
 
 const resetMapSettings = () => {
   mainPinMarker.setLatLng(DEFAULT_LOCATION);
@@ -85,9 +83,4 @@ const resetMapSettings = () => {
 
 };
 
-resetButton.addEventListener('click', () => {
-  resetMapSettings();
-});
-
-
-export { createMarker, map, mainPinMarker, resetMapSettings, removeMapPin, renderListings };
+export { createMarker, mainPinMarker, resetMapSettings, removeMapPin, renderListings };

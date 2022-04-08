@@ -12,9 +12,9 @@ const fillELement = (element, list = [], getChild) => {
 };
 
 const createOfferTemplate = ({ author = {}, offer = {} }) => {
-  const cardTemplate = document.querySelector('#card').content;
-  const cardElement = cardTemplate.cloneNode(true);
-  const card = cardElement.querySelector('.popup');
+  const cardTemplateElement = document.querySelector('#card').content;
+  const cardElement = cardTemplateElement.cloneNode(true);
+  const cardPopupElement = cardElement.querySelector('.popup');
 
   const contentToSelector = {
     '.popup__title': offer.title,
@@ -26,7 +26,7 @@ const createOfferTemplate = ({ author = {}, offer = {} }) => {
     '.popup__description': offer.description
   };
   Object.entries(contentToSelector).forEach(([selector, content]) => {
-    const element = card.querySelector(selector);
+    const element = cardPopupElement.querySelector(selector);
     if (content) {
       element.textContent = content;
     } else {
@@ -34,14 +34,14 @@ const createOfferTemplate = ({ author = {}, offer = {} }) => {
     }
   });
 
-  const featuresELement = card.querySelector('.popup__features');
+  const featuresELement = cardPopupElement.querySelector('.popup__features');
   fillELement(featuresELement, offer.features, (feature) => {
     const featureElement = document.createElement('li');
     featureElement.className = `popup__feature popup__feature--${feature}`;
     return featureElement;
   });
 
-  const photosElement = card.querySelector('.popup__photos');
+  const photosElement = cardPopupElement.querySelector('.popup__photos');
   const photoSampleELement = photosElement.querySelector('.popup__photo');
   fillELement(photosElement, offer.photos, (photo) => {
     const photoElement = photoSampleELement.cloneNode();
@@ -49,13 +49,13 @@ const createOfferTemplate = ({ author = {}, offer = {} }) => {
     return photoElement;
   });
 
-  const avatarElement = card.querySelector('.popup__avatar');
+  const avatarElement = cardPopupElement.querySelector('.popup__avatar');
   if (author.avatar) {
     avatarElement.src = author.avatar;
   } else {
     avatarElement.remove();
   }
-  return card;
+  return cardPopupElement;
 };
 
 export { createOfferTemplate };

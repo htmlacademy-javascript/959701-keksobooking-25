@@ -943,6 +943,10 @@ fieldset {
   border: 2px solid #ff5635;
 }
 
+.preview_style {
+  background-size: cover;
+  background-repeat: no-repeat;
+}
 
 /**
  * Сообщения об успешном и неуспешном создании объявления

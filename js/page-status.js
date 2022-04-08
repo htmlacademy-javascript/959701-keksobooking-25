@@ -1,5 +1,4 @@
 // Активация/деактивация страницы
-
 const mapFiltersElement = document.querySelector('.map__filters');
 const adFormElement = document.querySelector('.ad-form');
 const mapFiltersDisabledClassName = 'map__filters--disabled';
@@ -22,4 +21,6 @@ const togglePage = (activeFlag) => () => {
 const activatePage = togglePage(true);
 const deactivatePage = togglePage(false);
 
-export { activatePage, deactivatePage };
+document.addEventListener('load', deactivatePage());
+
+export { activatePage, deactivatePage, mapFiltersElement, toggleForm, mapFiltersDisabledClassName };

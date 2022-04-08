@@ -18,12 +18,13 @@ const timeoutFieldElement = document.querySelector('#timeout');
 const roomNumberElement = adformElement.querySelector('[name="rooms"]');
 const capacityElement = adformElement.querySelector('[name="capacity"]');
 const initialType = accommodationTypeElement.value;
-const inputAvatar = adformElement.querySelector('.ad-form-header__input[type=file]');
-const inputHousePhoto = adformElement.querySelector('#images[type=file]');
-const previewAvatar = adformElement.querySelector('.ad-form-header__preview');
-const defaultAvatar = previewAvatar.querySelector('img');
-const previewHousePhoto = adformElement.querySelector('.ad-form__photo');
-const resetButton = document.querySelector('.ad-form__reset');
+const inputAvatarElement = adformElement.querySelector('.ad-form-header__input[type=file]');
+const inputHousePhotoElement = adformElement.querySelector('#images[type=file]');
+const previewAvatarElement = adformElement.querySelector('.ad-form-header__preview');
+const defaultAvatarElement = previewAvatarElement.querySelector('img');
+const previewHousePhotoElement = adformElement.querySelector('.ad-form__photo');
+const resetButtonElement = document.querySelector('.ad-form__reset');
+const buttonSubmitElement = document.querySelector('.ad-form__submit');
 
 const pristine = new Pristine(adformElement, {
   classTo: 'ad-form__element',
@@ -94,12 +95,12 @@ timeoutFieldElement.addEventListener('change', () => {
 
 // Загрузка превью фото
 
-inputAvatar.addEventListener('change', () => {
-  getPreviewPhoto(inputAvatar, previewAvatar);
+inputAvatarElement.addEventListener('change', () => {
+  getPreviewPhoto(inputAvatarElement, previewAvatarElement, defaultAvatarElement);
 });
 
-inputHousePhoto.addEventListener('change', () => {
-  getPreviewPhoto(inputHousePhoto, previewHousePhoto);
+inputHousePhotoElement.addEventListener('change', () => {
+  getPreviewPhoto(inputHousePhotoElement, previewHousePhotoElement);
 });
 
 // Сброс формы, карты к начальным настройкам
@@ -108,16 +109,20 @@ const resetAllSettings = () => {
   resetMapSettings();
   filterElement.reset();
   adformElement.reset();
-  previewAvatar.style.backgroundImage = '';
-  previewHousePhoto.style.backgroundImage = '';
-  defaultAvatar.style.visibility = 'visible';
+  previewAvatarElement.style.backgroundImage = '';
+  previewHousePhotoElement.style.backgroundImage = '';
+  defaultAvatarElement.style.visibility = 'visible';
 };
 
 // Сброс формы по кнопке "Очистить"
 
-resetButton.addEventListener('click', () => {
-  resetAllSettings();
-});
+resetButtonElement.addEventListener('click', resetAllSettings);
+
+// Переключатель кнопки "Опубликовать"
+
+const switchButton = (status) => {
+  buttonSubmitElement.disabled = status;
+};
 
 adformElement.addEventListener('submit', (evt) => {
   evt.preventDefault();
@@ -125,7 +130,10 @@ adformElement.addEventListener('submit', (evt) => {
     adformElement.querySelector('.has-danger [name]').focus();
     return;
   }
+  switchButton(true);
   const formData = new FormData(evt.target);
   sendData(formData);
   resetAllSettings();
 });
+
+export {switchButton};
