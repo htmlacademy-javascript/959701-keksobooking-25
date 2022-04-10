@@ -7,7 +7,6 @@ import { declineNum } from './util.js';
 import { getPreviewPhoto } from './pic-uploader.js';
 
 const PRICE_VALIDATION_PRIORITY = 1000;
-
 const adformElement = document.querySelector('.ad-form');
 const accommodationTypeElement = document.querySelector('#type');
 const priceSliderElement = document.querySelector('.ad-form__slider');
@@ -18,12 +17,13 @@ const timeoutFieldElement = document.querySelector('#timeout');
 const roomNumberElement = adformElement.querySelector('[name="rooms"]');
 const capacityElement = adformElement.querySelector('[name="capacity"]');
 const initialType = accommodationTypeElement.value;
-const inputAvatar = adformElement.querySelector('.ad-form-header__input[type=file]');
-const inputHousePhoto = adformElement.querySelector('#images[type=file]');
-const previewAvatar = adformElement.querySelector('.ad-form-header__preview');
-const defaultAvatar = previewAvatar.querySelector('img');
-const previewHousePhoto = adformElement.querySelector('.ad-form__photo');
-const resetButton = document.querySelector('.ad-form__reset');
+const inputAvatarElement = adformElement.querySelector('.ad-form-header__input[type=file]');
+const inputHousePhotoElement = adformElement.querySelector('#images[type=file]');
+const previewAvatarElement = adformElement.querySelector('.ad-form-header__preview');
+const defaultAvatarElement = previewAvatarElement.querySelector('img');
+const previewHousePhotoElement = adformElement.querySelector('.ad-form__photo');
+const buttonResetElement = document.querySelector('.ad-form__reset');
+const buttonSubmitElement = document.querySelector('.ad-form__submit');
 
 const pristine = new Pristine(adformElement, {
   classTo: 'ad-form__element',
@@ -94,12 +94,12 @@ timeoutFieldElement.addEventListener('change', () => {
 
 // Загрузка превью фото
 
-inputAvatar.addEventListener('change', () => {
-  getPreviewPhoto(inputAvatar, previewAvatar);
+inputAvatarElement.addEventListener('change', () => {
+  getPreviewPhoto(inputAvatarElement, previewAvatarElement, defaultAvatarElement);
 });
 
-inputHousePhoto.addEventListener('change', () => {
-  getPreviewPhoto(inputHousePhoto, previewHousePhoto);
+inputHousePhotoElement.addEventListener('change', () => {
+  getPreviewPhoto(inputHousePhotoElement, previewHousePhotoElement);
 });
 
 // Сброс формы, карты к начальным настройкам
@@ -108,16 +108,20 @@ const resetAllSettings = () => {
   resetMapSettings();
   filterElement.reset();
   adformElement.reset();
-  previewAvatar.style.backgroundImage = '';
-  previewHousePhoto.style.backgroundImage = '';
-  defaultAvatar.style.visibility = 'visible';
+  pristine.reset();
+  previewAvatarElement.style.backgroundImage = '';
+  previewHousePhotoElement.style.backgroundImage = '';
+  defaultAvatarElement.style.visibility = 'visible';
+  priceSlider.reset();
 };
 
-// Сброс формы по кнопке "Очистить"
+buttonResetElement.addEventListener('click', resetAllSettings );
 
-resetButton.addEventListener('click', () => {
-  resetAllSettings();
-});
+// Переключатель кнопки "Опубликовать"
+
+const switchSubmitButton = (status) => {
+  buttonSubmitElement.disabled = status;
+};
 
 adformElement.addEventListener('submit', (evt) => {
   evt.preventDefault();
@@ -125,7 +129,11 @@ adformElement.addEventListener('submit', (evt) => {
     adformElement.querySelector('.has-danger [name]').focus();
     return;
   }
+  switchSubmitButton(true);
   const formData = new FormData(evt.target);
   sendData(formData);
   resetAllSettings();
 });
+
+export { switchSubmitButton };
+

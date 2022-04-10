@@ -1,10 +1,10 @@
 import { receiveData } from './api.js';
-import { removeMapPin, renderListings } from './map.js';
+import { removeMapPin } from './map.js';
 import { QUANTITY_OFFERS } from './data.js';
 import { debounce } from './util.js';
+import { renderListings } from './render-listings.js';
+import { RERENDER_DELAY, DEFAULT_VALUE } from './data.js';
 
-const RERENDER_DELAY = 500;
-const DEFAULT_VALUE = 'any';
 const housingPrice = {
   'low': {
     from: 0,
@@ -48,13 +48,19 @@ const filterOffers = (data) => {
   return offers;
 };
 
-filterElement.addEventListener('change', () => {
+filterElement.addEventListener('change', debounce(() => {
   receiveData((data) => {
     removeMapPin();
-    const offers = data.slice(0, QUANTITY_OFFERS);
-    debounce(renderListings(filterOffers(offers), RERENDER_DELAY));
+    const offers = data.slice();
+    const filtrationResult = filterOffers(offers);
+    while (filtrationResult.length > QUANTITY_OFFERS) {
+      if (filtrationResult === QUANTITY_OFFERS) {
+        break;
+      }
+      filtrationResult.pop();
+    }
+    renderListings(filtrationResult);
   });
-});
+}, RERENDER_DELAY));
 
 export { filterOffers, filterElement };
-

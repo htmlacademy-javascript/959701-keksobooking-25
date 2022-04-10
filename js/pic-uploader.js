@@ -1,28 +1,30 @@
-// Загрузка и отрисовка превью фото
-
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
-const getPreviewPhoto = (fileChooser, photoPreview) => {
-  const file = fileChooser.files[0];
+const getPreviewPhoto = (fileChooserElement, photoPreviewElement, imageElement = null) => {
+  const file = fileChooserElement.files[0];
   const fileName = file.name.toLowerCase();
-  const otherPhoto = photoPreview.querySelector('img');
   const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
 
-  if (photoPreview.contains(otherPhoto)) {
-    otherPhoto.style.visibility = 'hidden';
-  }
-
   if (matches) {
+    if (imageElement) {
+      imageElement.style.visibility = 'hidden';
+    }
+
     const reader = new FileReader();
 
     reader.addEventListener('load', () => {
-      photoPreview.style.backgroundImage = `url(${reader.result}`;
-      photoPreview.style.backgroundSize = 'cover';
+      photoPreviewElement.style.backgroundImage = `url(${reader.result}`;
+      photoPreviewElement.classList.add('preview_style');
     });
 
     reader.readAsDataURL(file);
+  } else {
+    fileChooserElement.value = '';
+    photoPreviewElement.style.backgroundImage = 'none';
+    if (imageElement) {
+      imageElement.style.visibility = 'visible';
+    }
   }
 };
 
 export { getPreviewPhoto };
-
