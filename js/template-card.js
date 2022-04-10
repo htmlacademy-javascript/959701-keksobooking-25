@@ -1,4 +1,6 @@
-// Создание шаблона объявления
+import { offerTypes } from './data.js';
+
+const cardTemplateElement = document.querySelector('#card').content;
 
 const fillELement = (element, list = [], getChild) => {
   if (list.length > 0) {
@@ -11,11 +13,12 @@ const fillELement = (element, list = [], getChild) => {
   }
 };
 
+// Создание шаблона объявления
+
 const createOfferTemplate = ({ author = {}, offer = {} }) => {
-  const cardTemplateElement = document.querySelector('#card').content;
   const cardElement = cardTemplateElement.cloneNode(true);
   const cardPopupElement = cardElement.querySelector('.popup');
-
+  const typeElement = cardPopupElement.querySelector('.popup__type');
   const contentToSelector = {
     '.popup__title': offer.title,
     '.popup__text--address': offer.address,
@@ -27,6 +30,7 @@ const createOfferTemplate = ({ author = {}, offer = {} }) => {
   };
   Object.entries(contentToSelector).forEach(([selector, content]) => {
     const element = cardPopupElement.querySelector(selector);
+    typeElement.textContent = offerTypes[offer.type].ru;
     if (content) {
       element.textContent = content;
     } else {

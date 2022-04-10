@@ -7,7 +7,6 @@ import { declineNum } from './util.js';
 import { getPreviewPhoto } from './pic-uploader.js';
 
 const PRICE_VALIDATION_PRIORITY = 1000;
-
 const adformElement = document.querySelector('.ad-form');
 const accommodationTypeElement = document.querySelector('#type');
 const priceSliderElement = document.querySelector('.ad-form__slider');
@@ -23,7 +22,7 @@ const inputHousePhotoElement = adformElement.querySelector('#images[type=file]')
 const previewAvatarElement = adformElement.querySelector('.ad-form-header__preview');
 const defaultAvatarElement = previewAvatarElement.querySelector('img');
 const previewHousePhotoElement = adformElement.querySelector('.ad-form__photo');
-const resetButtonElement = document.querySelector('.ad-form__reset');
+const buttonResetElement = document.querySelector('.ad-form__reset');
 const buttonSubmitElement = document.querySelector('.ad-form__submit');
 
 const pristine = new Pristine(adformElement, {
@@ -109,18 +108,18 @@ const resetAllSettings = () => {
   resetMapSettings();
   filterElement.reset();
   adformElement.reset();
+  pristine.reset();
   previewAvatarElement.style.backgroundImage = '';
   previewHousePhotoElement.style.backgroundImage = '';
   defaultAvatarElement.style.visibility = 'visible';
+  priceSlider.reset();
 };
 
-// Сброс формы по кнопке "Очистить"
-
-resetButtonElement.addEventListener('click', resetAllSettings);
+buttonResetElement.addEventListener('click', resetAllSettings );
 
 // Переключатель кнопки "Опубликовать"
 
-const switchButton = (status) => {
+const switchSubmitButton = (status) => {
   buttonSubmitElement.disabled = status;
 };
 
@@ -130,10 +129,11 @@ adformElement.addEventListener('submit', (evt) => {
     adformElement.querySelector('.has-danger [name]').focus();
     return;
   }
-  switchButton(true);
+  switchSubmitButton(true);
   const formData = new FormData(evt.target);
   sendData(formData);
   resetAllSettings();
 });
 
-export {switchButton};
+export { switchSubmitButton };
+

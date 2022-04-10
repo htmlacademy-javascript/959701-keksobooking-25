@@ -1,22 +1,24 @@
 import { activatePage } from './page-status.js';
 import { DEFAULT_LOCATION } from './data.js';
 import { filterElement } from './filter.js';
-import { receiveData } from './api.js';
-import { QUANTITY_OFFERS } from './data.js';
-import { createOfferTemplate } from './template-card.js';
+import { renderStartListings } from './render-listings.js';
 
 const addressElement = document.querySelector('#address');
 
-const map = L.map('map-canvas').on('load', activatePage).setView(DEFAULT_LOCATION, 12);
+const renderStartingLayer = (leafletMap) => {
+  L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }
+  ).addTo(leafletMap);
+};
+
+const map = L.map('map-canvas');
+
+map.on('load', activatePage, renderStartingLayer(map), renderStartListings()).setView(DEFAULT_LOCATION, 12);
 
 const markerGroup = L.layerGroup().addTo(map);
-
-L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-).addTo(map);
 
 // Добавление главного маркера
 
@@ -57,14 +59,6 @@ const createMarker = (location, popupContent) => {
     .bindPopup(popupContent);
 };
 
-// Отрисовка маркеров и объявлений
-
-const renderListings = (listings) => {
-  listings.forEach((offer) => {
-    createMarker(offer.location, createOfferTemplate(offer));
-  });
-};
-
 // Удаление маркеров
 
 const removeMapPin = () => {
@@ -77,10 +71,7 @@ const resetMapSettings = () => {
   mainPinMarker.setLatLng(DEFAULT_LOCATION);
   map.closePopup().setView(DEFAULT_LOCATION, 12);
   filterElement.reset();
-  receiveData((data) => {
-    renderListings(data.slice(0, QUANTITY_OFFERS));
-  });
-
+  renderStartListings();
 };
 
-export { createMarker, mainPinMarker, resetMapSettings, removeMapPin, renderListings };
+export { createMarker, map, mainPinMarker, resetMapSettings, removeMapPin };
