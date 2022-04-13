@@ -1,4 +1,4 @@
-// Активация/деактивация страницы
+// Активация/деактивация элементов страницы
 
 const mapFiltersElement = document.querySelector('.map__filters');
 const adFormElement = document.querySelector('.ad-form');
@@ -16,7 +16,7 @@ const toggleForm = (activeFlag, formElement, disabledClassName) => {
   formElement.querySelectorAll('select').forEach((select) => {
     select.disabled = !activeFlag;
   });
-  if(!activeFlag) {
+  if (!activeFlag) {
     while (mapCanvasElement.firstChild) {
       mapCanvasElement.removeChild(mapCanvasElement.firstChild);
     }

@@ -6,9 +6,7 @@ const isEscapeKeyPressed = (evt) => evt.key === 'Escape';
 
 const declineNum = (num, optionOne, optionTwo) => {
   if (Number(num) === 1) { return optionOne; }
-  else {
-    return optionTwo;
-  }
+  return optionTwo;
 };
 
 // Устранение "дребезга"
