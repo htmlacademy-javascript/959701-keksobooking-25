@@ -1,7 +1,11 @@
 import { createOfferTemplate } from './template-card.js';
-import { createMarker } from './map.js';
-import { QUANTITY_OFFERS } from './data.js';
+import { createMarker, removeMapPin } from './map.js';
+import { QUANTITY_OFFERS } from './const.js';
 import { receiveData } from './api.js';
+import { filterElement, filterOffers } from './filter.js';
+import { debounce } from './util.js';
+import { RERENDER_DELAY } from './const.js';
+import { buttonResetElement } from './user-form.js';
 
 // Отрисовка маркеров и объявлений
 
@@ -11,10 +15,24 @@ const renderListings = (listings) => {
   });
 };
 
-const renderStartListings = () => {
+const renderDownloadedListings = () => {
   receiveData((data) => {
-    renderListings(data.slice(0, QUANTITY_OFFERS));
+    const offers = data.slice();
+    renderListings(offers.slice(0, QUANTITY_OFFERS));
+    filterElement.addEventListener('change', debounce(() => {
+      removeMapPin();
+      const filtrationResult = filterOffers(offers);
+      while (filtrationResult.length > QUANTITY_OFFERS) {
+        if (filtrationResult === QUANTITY_OFFERS) {
+          break;
+        }
+        filtrationResult.pop();
+      }
+      renderListings(filtrationResult);
+    }, RERENDER_DELAY));
+    buttonResetElement.addEventListener('click', () => renderListings(offers.slice(0, QUANTITY_OFFERS)));
   });
 };
 
-export { renderListings, renderStartListings };
+export { renderListings, renderDownloadedListings };
+
