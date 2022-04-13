@@ -1,4 +1,4 @@
-import { MAX_PRICE } from './data.js';
+import { MAX_PRICE } from './user-form.js';
 
 // Создание слайдера
 

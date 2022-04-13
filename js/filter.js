@@ -1,9 +1,4 @@
-import { receiveData } from './api.js';
-import { removeMapPin } from './map.js';
-import { QUANTITY_OFFERS } from './data.js';
-import { debounce } from './util.js';
-import { renderListings } from './render-listings.js';
-import { RERENDER_DELAY, DEFAULT_VALUE } from './data.js';
+import { QUANTITY_OFFERS, DEFAULT_VALUE } from './const.js';
 
 const housingPrice = {
   'low': {
@@ -22,7 +17,7 @@ const housingPrice = {
 const filterElement = document.querySelector('.map__filters');
 const filters = Array.from(document.querySelector('.map__filters').children);
 
-const filterRules = {
+const filterRule = {
   'housing-type': (data, filter) => filter.value === data.offer.type,
   'housing-price': (data, filter) => data.offer.price >= housingPrice[filter.value].from && data.offer.price < housingPrice[filter.value].to,
   'housing-rooms': (data, filter) => filter.value === data.offer.rooms.toString(),
@@ -40,27 +35,12 @@ const filterOffers = (data) => {
   const offers = [];
   let result;
   for (let i = 0; i < data.length && offers.length < QUANTITY_OFFERS; i++) {
-    result = filters.every((filter) => filter.value === DEFAULT_VALUE ? true : filterRules[filter.id](data[i], filter));
+    result = filters.every((filter) => filter.value === DEFAULT_VALUE ? true : filterRule[filter.id](data[i], filter));
     if (result) {
       offers.push(data[i]);
     }
   }
   return offers;
 };
-
-filterElement.addEventListener('change', debounce(() => {
-  receiveData((data) => {
-    removeMapPin();
-    const offers = data.slice();
-    const filtrationResult = filterOffers(offers);
-    while (filtrationResult.length > QUANTITY_OFFERS) {
-      if (filtrationResult === QUANTITY_OFFERS) {
-        break;
-      }
-      filtrationResult.pop();
-    }
-    renderListings(filtrationResult);
-  });
-}, RERENDER_DELAY));
 
 export { filterOffers, filterElement };

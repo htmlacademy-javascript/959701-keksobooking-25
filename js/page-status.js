@@ -13,6 +13,9 @@ const toggleForm = (activeFlag, formElement, disabledClassName) => {
   formElement.querySelectorAll('fieldset').forEach((fieldset) => {
     fieldset.disabled = !activeFlag;
   });
+  formElement.querySelectorAll('select').forEach((select) => {
+    select.disabled = !activeFlag;
+  });
   if(!activeFlag) {
     while (mapCanvasElement.firstChild) {
       mapCanvasElement.removeChild(mapCanvasElement.firstChild);
@@ -20,14 +23,11 @@ const toggleForm = (activeFlag, formElement, disabledClassName) => {
   }
 };
 
-const togglePage = (activeFlag) => () => {
-  toggleForm(activeFlag, mapFiltersElement, mapFiltersDisabledClassName);
+const toggleStatusForm = (activeFlag) => () => {
   toggleForm(activeFlag, adFormElement, adFormDisabledClassName);
 };
 
-const activatePage = togglePage(true);
-const deactivatePage = togglePage(false);
+const activateForm = toggleStatusForm(true);
 
-document.addEventListener('load', deactivatePage());
+export { activateForm, mapFiltersElement, toggleForm, mapFiltersDisabledClassName };
 
-export { activatePage, deactivatePage, mapFiltersElement, toggleForm, mapFiltersDisabledClassName };

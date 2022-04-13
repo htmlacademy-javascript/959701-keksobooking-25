@@ -1,4 +1,4 @@
-import { offerTypes } from './data.js';
+import { offerType } from './user-form.js';
 
 const cardTemplateElement = document.querySelector('#card').content;
 
@@ -30,7 +30,7 @@ const createOfferTemplate = ({ author = {}, offer = {} }) => {
   };
   Object.entries(contentToSelector).forEach(([selector, content]) => {
     const element = cardPopupElement.querySelector(selector);
-    typeElement.textContent = offerTypes[offer.type].ru;
+    typeElement.textContent = offerType[offer.type].ru;
     if (content) {
       element.textContent = content;
     } else {

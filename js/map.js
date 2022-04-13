@@ -1,7 +1,7 @@
-import { activatePage } from './page-status.js';
-import { DEFAULT_LOCATION } from './data.js';
+import { activateForm } from './page-status.js';
+import { DEFAULT_LOCATION } from './const.js';
 import { filterElement } from './filter.js';
-import { renderStartListings } from './render-listings.js';
+import { renderDownloadedListings } from './render-listings.js';
 
 const addressElement = document.querySelector('#address');
 
@@ -16,7 +16,7 @@ const renderStartingLayer = (leafletMap) => {
 
 const map = L.map('map-canvas');
 
-map.on('load', activatePage, renderStartingLayer(map), renderStartListings()).setView(DEFAULT_LOCATION, 12);
+map.on('load', activateForm, renderStartingLayer(map), renderDownloadedListings()).setView(DEFAULT_LOCATION, 12);
 
 const markerGroup = L.layerGroup().addTo(map);
 
@@ -71,7 +71,7 @@ const resetMapSettings = () => {
   mainPinMarker.setLatLng(DEFAULT_LOCATION);
   map.closePopup().setView(DEFAULT_LOCATION, 12);
   filterElement.reset();
-  renderStartListings();
+  removeMapPin();
 };
 
 export { createMarker, map, mainPinMarker, resetMapSettings, removeMapPin };

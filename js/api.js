@@ -1,7 +1,6 @@
 import { createPopup } from './popup.js';
-import { switchSubmitButton } from './user-form.js';
 import { mapFiltersElement, toggleForm, mapFiltersDisabledClassName } from './page-status.js';
-import { SERVER, DATA_URL } from './data.js';
+import { SERVER, DATA_URL } from './const.js';
 
 // Загрузка объявлений с сервера
 
@@ -11,12 +10,12 @@ const receiveData = (onSuccess) => fetch(DATA_URL, {
 })
   .then((res) => res.json())
   .then(onSuccess)
+  .then(() => toggleForm(true, mapFiltersElement, mapFiltersDisabledClassName))
   .catch(() => {
     createPopup(false, (popupElement) => {
       popupElement.querySelector('.error__message').textContent = 'Ошибка получения объявлений';
       popupElement.querySelector('.error__button').textContent = 'Добавить объявление';
     });
-    toggleForm(false, mapFiltersElement, mapFiltersDisabledClassName);
     return [];
   });
 
@@ -28,7 +27,6 @@ const sendData = (data) => fetch(SERVER, {
 })
   .then(({ ok }) => {
     createPopup(ok);
-    switchSubmitButton(false);
   })
   .catch(() => {
     createPopup(false);

@@ -1,4 +1,5 @@
 import { isEscapeKeyPressed } from './util.js';
+import { switchButton, buttonSubmitElement, buttonResetElement } from './user-form.js';
 
 const errorTemplateElement = document.querySelector('#error').content.querySelector('.error');
 const successTemplateElement = document.querySelector('#success').content.querySelector('.success');
@@ -12,9 +13,13 @@ const createPopup = (isSucces = true, modifyPopup = null) => {
     modifyPopup(popupElement);
   }
   document.body.append(popupElement);
+  switchButton(buttonSubmitElement, true);
+  switchButton(buttonResetElement, true);
 
   const closePopup = () => {
     popupElement.remove();
+    switchButton(buttonSubmitElement, false);
+    switchButton(buttonResetElement, false);
     document.removeEventListener('keydown', keyCloseHandler);
   };
 
@@ -24,6 +29,7 @@ const createPopup = (isSucces = true, modifyPopup = null) => {
       closePopup();
     }
   }
+
   popupElement.addEventListener('click', () => closePopup());
   document.addEventListener('keydown', keyCloseHandler);
 };
