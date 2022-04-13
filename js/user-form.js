@@ -36,26 +36,25 @@ const roomToGuest = {
   100: ['0'],
 };
 
-const PRICE_VALIDATION_PRIORITY = 1000;
-const addFormElement = document.querySelector('.ad-form');
+const adFormElement = document.querySelector('.ad-form');
 const accommodationTypeElement = document.querySelector('#type');
 const priceSliderElement = document.querySelector('.ad-form__slider');
 const priceValueElement = document.querySelector('#price');
 const priceSlider = createUISlider(priceSliderElement);
 const timeinFieldElement = document.querySelector('#timein');
 const timeoutFieldElement = document.querySelector('#timeout');
-const roomNumberElement = addFormElement.querySelector('[name="rooms"]');
-const capacityElement = addFormElement.querySelector('[name="capacity"]');
+const roomNumberElement = adFormElement.querySelector('[name="rooms"]');
+const capacityElement = adFormElement.querySelector('[name="capacity"]');
 const initialType = accommodationTypeElement.value;
-const inputAvatarElement = addFormElement.querySelector('.ad-form-header__input[type=file]');
-const inputHousePhotoElement = addFormElement.querySelector('#images[type=file]');
-const previewAvatarElement = addFormElement.querySelector('.ad-form-header__preview');
+const inputAvatarElement = adFormElement.querySelector('.ad-form-header__input[type=file]');
+const inputHousePhotoElement = adFormElement.querySelector('#images[type=file]');
+const previewAvatarElement = adFormElement.querySelector('.ad-form-header__preview');
 const defaultAvatarElement = previewAvatarElement.querySelector('img');
-const previewHousePhotoElement = addFormElement.querySelector('.ad-form__photo');
+const previewHousePhotoElement = adFormElement.querySelector('.ad-form__photo');
 const buttonResetElement = document.querySelector('.ad-form__reset');
 const buttonSubmitElement = document.querySelector('.ad-form__submit');
 
-const pristine = new Pristine(addFormElement, {
+const pristine = new Pristine(adFormElement, {
   classTo: 'ad-form__element',
   errorTextParent: 'ad-form__element'
 });
@@ -73,43 +72,27 @@ const getCapacityMessage = () => {
 pristine.addValidator(capacityElement, validateCapacity, getCapacityMessage);
 roomNumberElement.addEventListener('change', () => pristine.validate(capacityElement));
 
-// Передача значения ползунка в форму
+// Передача значения ползунка в форму и валидация
 
 priceSlider.on('slide', () => {
   priceValueElement.value = priceSlider.get();
-  pristine.validate(priceSlider);
-});
-
-// Изменение значения плейсхолдера стоимости жилья
-
-const setPriceAttributes = (type) => {
-  const minPrice = offerType[type].min;
-  priceValueElement.min = minPrice;
-  priceValueElement.placeholder = minPrice;
-};
-setPriceAttributes(initialType);
-
-const changeType = (type = accommodationTypeElement.value) => {
-  setPriceAttributes(type);
-  priceSlider.updateOptions({
-    range: {
-      min: offerType[type].min,
-      max: MAX_PRICE,
-    },
-  });
-};
-
-accommodationTypeElement.addEventListener('change', () => {
-  changeType();
+  pristine.validate(priceValueElement);
 });
 
 // Валидация введенной цены за жилье
 
-const validatePrice = () => Number(priceValueElement.value) >= Number(priceValueElement.placeholder);
+const validatePrice = (value) => value >= offerType[accommodationTypeElement.value].min && value <= MAX_PRICE;
+const getPriceMessage = () => `Укажите от ${offerType[accommodationTypeElement.value].min} до ${MAX_PRICE} ₽/ночь`;
 
-const getPriceMessage = () => `Выберите число между ${priceValueElement.placeholder} и ${MAX_PRICE}`;
+pristine.addValidator(priceValueElement, validatePrice, getPriceMessage);
 
-pristine.addValidator(priceValueElement, validatePrice, getPriceMessage(), PRICE_VALIDATION_PRIORITY, true);
+const changeType = () => {
+  priceValueElement.placeholder = offerType[accommodationTypeElement.value].min;
+  priceValueElement.min = offerType[accommodationTypeElement.value].min;
+};
+changeType();
+
+accommodationTypeElement.addEventListener('change', () => changeType());
 
 // Обработка поля  «Время заезда-выезда»
 
@@ -136,7 +119,7 @@ inputHousePhotoElement.addEventListener('change', () => {
 const resetAllSettings = () => {
   resetMapSettings();
   filterElement.reset();
-  addFormElement.reset();
+  adFormElement.reset();
   pristine.reset();
   priceValueElement.placeholder = offerType[initialType].min;
   previewAvatarElement.style.backgroundImage = '';
@@ -153,10 +136,10 @@ const switchButton = (element, status) => {
   element.disabled = status;
 };
 
-addFormElement.addEventListener('submit', (evt) => {
+adFormElement.addEventListener('submit', (evt) => {
   evt.preventDefault();
   if (!pristine.validate()) {
-    addFormElement.querySelector('.has-danger [name]').focus();
+    adFormElement.querySelector('.has-danger [name]').focus();
     return;
   }
   const formData = new FormData(evt.target);

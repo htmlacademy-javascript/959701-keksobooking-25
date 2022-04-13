@@ -35,4 +35,3 @@ const renderDownloadedListings = () => {
 };
 
 export { renderListings, renderDownloadedListings };
-
