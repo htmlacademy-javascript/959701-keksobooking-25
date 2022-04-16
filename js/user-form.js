@@ -38,25 +38,25 @@ const roomToGuest = {
   100: ['0'],
 };
 
-const adFormElement = document.querySelector('.ad-form');
+const postFormElement = document.querySelector('.ad-form');
 const accommodationTypeElement = document.querySelector('#type');
 const priceSliderElement = document.querySelector('.ad-form__slider');
 const priceValueElement = document.querySelector('#price');
 const priceSlider = createUISlider(priceSliderElement);
 const timeinFieldElement = document.querySelector('#timein');
 const timeoutFieldElement = document.querySelector('#timeout');
-const roomNumberElement = adFormElement.querySelector('[name="rooms"]');
-const capacityElement = adFormElement.querySelector('[name="capacity"]');
+const roomNumberElement = postFormElement.querySelector('[name="rooms"]');
+const capacityElement = postFormElement.querySelector('[name="capacity"]');
 const initialType = accommodationTypeElement.value;
-const inputAvatarElement = adFormElement.querySelector('.ad-form-header__input[type=file]');
-const inputHousePhotoElement = adFormElement.querySelector('#images[type=file]');
-const previewAvatarElement = adFormElement.querySelector('.ad-form-header__preview');
+const inputAvatarElement = postFormElement.querySelector('.ad-form-header__input[type=file]');
+const inputHousePhotoElement = postFormElement.querySelector('#images[type=file]');
+const previewAvatarElement = postFormElement.querySelector('.ad-form-header__preview');
 const defaultAvatarElement = previewAvatarElement.querySelector('img');
-const previewHousePhotoElement = adFormElement.querySelector('.ad-form__photo');
+const previewHousePhotoElement = postFormElement.querySelector('.ad-form__photo');
 const buttonResetElement = document.querySelector('.ad-form__reset');
 const buttonSubmitElement = document.querySelector('.ad-form__submit');
 
-const pristine = new Pristine(adFormElement, {
+const pristine = new Pristine(postFormElement, {
   classTo: 'ad-form__element',
   errorTextParent: 'ad-form__element'
 });
@@ -107,8 +107,9 @@ accommodationTypeElement.addEventListener('change', () => {
       max: MAX_PRICE,
     },
   });
-  if(!priceValueElement.value) {
-    priceSlider.set(0); }
+  if (!priceValueElement.value) {
+    priceSlider.set(0);
+  }
   pristine.validate(priceValueElement);
 });
 
@@ -144,7 +145,7 @@ const resetAllSettings = () => {
   resetMapSettings();
   renderInitialListings();
   filterElement.reset();
-  adFormElement.reset();
+  postFormElement.reset();
   pristine.reset();
   priceValueElement.placeholder = offerType[initialType].min;
   previewAvatarElement.style.backgroundImage = '';
@@ -161,10 +162,10 @@ const switchButton = (element, status) => {
   element.disabled = status;
 };
 
-adFormElement.addEventListener('submit', (evt) => {
+postFormElement.addEventListener('submit', (evt) => {
   evt.preventDefault();
   if (!pristine.validate()) {
-    adFormElement.querySelector('.has-danger [name]').focus();
+    postFormElement.querySelector('.has-danger [name]').focus();
     return;
   }
   const formData = new FormData(evt.target);
