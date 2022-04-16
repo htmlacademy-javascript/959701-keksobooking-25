@@ -20,7 +20,7 @@ const createOfferTemplate = ({ author = {}, offer = {} }) => {
   const cardElement = cardTemplateElement.cloneNode(true);
   const cardPopupElement = cardElement.querySelector('.popup');
   const typeElement = cardPopupElement.querySelector('.popup__type');
-  const roomsString = getNumWithWord(offer.guests, ['комната', 'комнаты', 'комнат']);
+  const roomsString = getNumWithWord(offer.rooms, ['комната', 'комнаты', 'комнат']);
   const guestsString = getNumWithWord(offer.guests, ['гостя', 'гостей']);
   const contentToSelector = {
     '.popup__title': offer.title,
