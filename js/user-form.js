@@ -107,9 +107,9 @@ accommodationTypeElement.addEventListener('change', () => {
       max: MAX_PRICE,
     },
   });
-  if (priceValueElement.value.match(/^\d+$/)) {
-    pristine.validate(priceValueElement);
-  }
+  if(!priceValueElement.value) {
+    priceSlider.set(0); }
+  pristine.validate(priceValueElement);
 });
 
 priceValueElement.addEventListener('input', () => {
