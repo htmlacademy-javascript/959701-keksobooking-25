@@ -15,10 +15,14 @@ const renderListings = (listings) => {
   });
 };
 
+let initialOffers = [];
+const renderInitialListings = () => renderListings(initialOffers);
+
 const renderDownloadedListings = () => {
   receiveData((data) => {
     const offers = data.slice();
-    renderListings(offers.slice(0, QUANTITY_OFFERS));
+    initialOffers = offers.slice(0, QUANTITY_OFFERS);
+    renderInitialListings();
     filterElement.addEventListener('change', debounce(() => {
       removeMapPin();
       const filtrationResult = filterOffers(offers);
@@ -30,8 +34,8 @@ const renderDownloadedListings = () => {
       }
       renderListings(filtrationResult);
     }, RERENDER_DELAY));
-    buttonResetElement.addEventListener('click', () => renderListings(offers.slice(0, QUANTITY_OFFERS)));
+    buttonResetElement.addEventListener('click', () => renderInitialListings());
   });
 };
 
-export { renderListings, renderDownloadedListings };
+export { renderListings, renderDownloadedListings, renderInitialListings };

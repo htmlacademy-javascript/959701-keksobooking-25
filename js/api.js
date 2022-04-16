@@ -21,12 +21,15 @@ const receiveData = (onSuccess) => fetch(DATA_URL, {
 
 // Отправка объявления на сервер
 
-const sendData = (data) => fetch(SERVER, {
+const sendData = (data, handleSuccess) => fetch(SERVER, {
   method: 'POST',
   body: data,
 })
   .then(({ ok }) => {
     createPopup(ok);
+    if (ok) {
+      handleSuccess();
+    }
   })
   .catch(() => {
     createPopup(false);

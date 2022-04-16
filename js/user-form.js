@@ -2,9 +2,11 @@ import { createUISlider } from './slider.js';
 import { sendData } from './api.js';
 import { resetMapSettings } from './map.js';
 import { filterElement } from './filter.js';
-import { declineNum } from './util.js';
+import { getNumWithWord } from './util.js';
 import { getPreviewPhoto } from './pic-uploader.js';
+import { renderInitialListings } from './render-listings.js';
 
+const PRICE_VALIDATION_PRIORITY = 1000;
 const MAX_PRICE = 100000;
 const offerType = {
   palace: {
@@ -64,9 +66,9 @@ const pristine = new Pristine(adFormElement, {
 const validateCapacity = () => roomToGuest[roomNumberElement.value].includes(capacityElement.value);
 
 const getCapacityMessage = () => {
-  const rooms = declineNum(roomNumberElement.value, 'комнаты', 'комнат');
+  const rooms = getNumWithWord(roomNumberElement.value, ['комнаты', 'комнат']);
   const validGuests = roomToGuest[roomNumberElement.value];
-  return `Для ${roomNumberElement.value} ${rooms} допустимо гостей: ${validGuests.join(', ')}`;
+  return `Для ${rooms} допустимо гостей: ${validGuests.join(', ')}`;
 };
 
 pristine.addValidator(capacityElement, validateCapacity, getCapacityMessage);
@@ -81,10 +83,15 @@ priceSlider.on('slide', () => {
 
 // Валидация введенной цены за жилье
 
-const validatePrice = (value) => value >= offerType[accommodationTypeElement.value].min && value <= MAX_PRICE;
+const validatePrice = (value) => {
+  const price = Number(value || 0);
+  const inRange = price >= Number(priceValueElement.min) && price <= MAX_PRICE;
+  return /^\d+$/.test(value) && inRange;
+};
+
 const getPriceMessage = () => `Укажите от ${offerType[accommodationTypeElement.value].min} до ${MAX_PRICE} ₽/ночь`;
 
-pristine.addValidator(priceValueElement, validatePrice, getPriceMessage);
+pristine.addValidator(priceValueElement, validatePrice, getPriceMessage, PRICE_VALIDATION_PRIORITY, true);
 
 const changeType = () => {
   priceValueElement.placeholder = offerType[accommodationTypeElement.value].min;
@@ -92,7 +99,22 @@ const changeType = () => {
 };
 changeType();
 
-accommodationTypeElement.addEventListener('change', () => changeType());
+accommodationTypeElement.addEventListener('change', () => {
+  changeType();
+  priceSlider.updateOptions({
+    range: {
+      min: parseInt(priceValueElement.min, 10),
+      max: MAX_PRICE,
+    },
+  });
+  pristine.validate(priceValueElement);
+});
+
+priceValueElement.addEventListener('input', () => {
+  if (pristine.validate(priceValueElement)) {
+    priceSlider.set(parseInt(priceValueElement.value, 10));
+  }
+});
 
 // Обработка поля  «Время заезда-выезда»
 
@@ -118,6 +140,7 @@ inputHousePhotoElement.addEventListener('change', () => {
 
 const resetAllSettings = () => {
   resetMapSettings();
+  renderInitialListings();
   filterElement.reset();
   adFormElement.reset();
   pristine.reset();
@@ -143,8 +166,7 @@ adFormElement.addEventListener('submit', (evt) => {
     return;
   }
   const formData = new FormData(evt.target);
-  sendData(formData);
-  resetAllSettings();
+  sendData(formData, resetAllSettings);
 });
 
 export { switchButton, offerType, MAX_PRICE, buttonSubmitElement, buttonResetElement };
