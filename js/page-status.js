@@ -1,10 +1,9 @@
 // Активация/деактивация элементов страницы
 
 const mapFiltersElement = document.querySelector('.map__filters');
-const adFormElement = document.querySelector('.ad-form');
+const postFormElement = document.querySelector('.ad-form');
 const mapFiltersDisabledClassName = 'map__filters--disabled';
-const adFormDisabledClassName = 'ad-form--disabled';
-const mapCanvasElement = document.querySelector('#map-canvas');
+const postFormDisabledClassName = 'ad-form--disabled';
 
 const toggleForm = (activeFlag, formElement, disabledClassName) => {
   const classMethod = activeFlag ? 'remove' : 'add';
@@ -16,15 +15,10 @@ const toggleForm = (activeFlag, formElement, disabledClassName) => {
   formElement.querySelectorAll('select').forEach((select) => {
     select.disabled = !activeFlag;
   });
-  if (!activeFlag) {
-    while (mapCanvasElement.firstChild) {
-      mapCanvasElement.removeChild(mapCanvasElement.firstChild);
-    }
-  }
 };
 
 const toggleStatusForm = (activeFlag) => () => {
-  toggleForm(activeFlag, adFormElement, adFormDisabledClassName);
+  toggleForm(activeFlag, postFormElement, postFormDisabledClassName);
 };
 
 const activateForm = toggleStatusForm(true);
