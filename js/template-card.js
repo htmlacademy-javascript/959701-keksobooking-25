@@ -1,4 +1,5 @@
 import { offerType } from './user-form.js';
+import { getNumWithWord } from './util.js';
 
 const cardTemplateElement = document.querySelector('#card').content;
 
@@ -19,12 +20,14 @@ const createOfferTemplate = ({ author = {}, offer = {} }) => {
   const cardElement = cardTemplateElement.cloneNode(true);
   const cardPopupElement = cardElement.querySelector('.popup');
   const typeElement = cardPopupElement.querySelector('.popup__type');
+  const roomsString = getNumWithWord(offer.guests, ['комната', 'комнаты', 'комнат']);
+  const guestsString = getNumWithWord(offer.guests, ['гостя', 'гостей']);
   const contentToSelector = {
     '.popup__title': offer.title,
     '.popup__text--address': offer.address,
     '.popup__text--price': `${offer.price} \u20bd/ночь`,
     '.popup__type': offer.type,
-    '.popup__text--capacity': `${offer.rooms} комнаты для ${offer.guests} гостей`,
+    '.popup__text--capacity': `${roomsString} для ${guestsString}`,
     '.popup__text--time': `Заезд после ${offer.checkin} выезд до ${offer.checkout}`,
     '.popup__description': offer.description
   };
