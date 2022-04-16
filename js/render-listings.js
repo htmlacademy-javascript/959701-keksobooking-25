@@ -7,6 +7,8 @@ import { debounce } from './util.js';
 import { RERENDER_DELAY } from './const.js';
 import { buttonResetElement } from './user-form.js';
 
+let initialOffers = [];
+
 // Отрисовка маркеров и объявлений
 
 const renderListings = (listings) => {
@@ -15,7 +17,6 @@ const renderListings = (listings) => {
   });
 };
 
-let initialOffers = [];
 const renderInitialListings = () => renderListings(initialOffers);
 
 const renderDownloadedListings = () => {
